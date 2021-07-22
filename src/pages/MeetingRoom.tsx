@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { routes } from '../routes/index';
 import { Link } from 'react-router-dom';
@@ -10,12 +10,14 @@ import SpeechRecognition, {
 interface Props {}
 
 export default function MeetingRoom(props: Props) {
-  const {
-    transcript,
-    interimTranscript,
-    resetTranscript,
-  } = useSpeechRecognition();
+  const { transcript, resetTranscript } = useSpeechRecognition();
+  const [transcriptArr, setTranscriptArr] = useState<string[]>([]);
   const [recording, setRecording] = useState(false);
+
+  useEffect(() => {
+    const newTranscriptArr = transcript.split(' ');
+    setTranscriptArr(newTranscriptArr);
+  }, [transcript]);
 
   const toggleListening = useCallback(() => {
     if (recording) {
@@ -23,7 +25,7 @@ export default function MeetingRoom(props: Props) {
       setRecording(false);
     } else {
       SpeechRecognition.startListening({
-        language: 'kor-US',
+        language: 'ko-KR',
         continuous: true,
       });
       setRecording(true);
@@ -34,8 +36,6 @@ export default function MeetingRoom(props: Props) {
     alert("Browser doesn't support speech recognition.");
   }
 
-  console.log('transcript :', transcript);
-  console.log('interimTranscript : ', interimTranscript);
   return (
     <>
       <Navigation>
@@ -47,7 +47,7 @@ export default function MeetingRoom(props: Props) {
 
       <Canvas></Canvas>
 
-      <TranscriptBox></TranscriptBox>
+      <TranscriptBox>{transcript}</TranscriptBox>
 
       <Button type="mic" onClick={toggleListening}>
         {' '}
@@ -58,7 +58,6 @@ export default function MeetingRoom(props: Props) {
         {' '}
         Reset
       </Button>
-      <p>{transcript}</p>
     </>
   );
 }
