@@ -1,16 +1,29 @@
 export const random_rgba = (): string => {
-  const o = Math.round,
-    r = Math.random,
-    s = 50;
-  return (
-    'rgba(' +
-    o(r() * s) +
-    ',' +
-    o(r() * s) +
-    ',' +
-    o(r() * s) +
-    ',' +
-    r().toFixed(1) +
-    ')'
-  );
+  const n = Math.round(Math.random() * 6);
+  let color = "";
+  console.log("n", n);
+  switch (n) {
+    case 0:
+      color = "lightcoral";
+      break;
+    case 1:
+      color = "lightsalmon";
+      break;
+    case 2:
+      color = "lightblue";
+      break;
+    case 3:
+      color = "lightgreen";
+      break;
+    case 4:
+      color = "pink";
+      break;
+    case 5:
+      color = "yellow";
+      break;
+    case 6:
+      color = "lightcyan";
+  }
+  console.log("color", color)
+  return color;
 };

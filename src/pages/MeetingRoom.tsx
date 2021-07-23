@@ -14,13 +14,13 @@ interface Props {}
 export default function MeetingRoom(props: Props) {
   const [transcriptArr, setTranscriptArr] = useState<string[]>([]);
   const [recording, setRecording] = useState(false);
-  const [ballArr, setBallArr] = useState<string[]>([]);
-
   const { transcript, resetTranscript } = useSpeechRecognition();
 
   useEffect(() => {
+    // console.log('transcript', transcript);
     const newTranscriptArr = transcript.split(' ');
     setTranscriptArr(newTranscriptArr);
+    console.log('newTranscriptArr', newTranscriptArr);
   }, [transcript]);
 
   const toggleListening = useCallback(() => {
@@ -45,7 +45,7 @@ export default function MeetingRoom(props: Props) {
       <PageTitle title={'Room'} />
       <Header label={'Meeting room'} />
 
-      <Diagram ballArr={ballArr} transcriptArr={transcriptArr} />
+      <Diagram transcriptArr={transcriptArr} />
 
       <Button type="mic" onClick={toggleListening}>
         {' '}

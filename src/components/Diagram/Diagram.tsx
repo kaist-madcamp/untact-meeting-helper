@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import * as go from 'gojs';
 import styled from 'styled-components';
 import { ReactDiagram } from 'gojs-react';
@@ -6,7 +6,6 @@ import { random_rgba } from './utils';
 import './Diagram.css';
 
 interface Props {
-  ballArr: string[];
   transcriptArr: string[];
 }
 
@@ -26,52 +25,62 @@ function initDiagram() {
   });
 
   // define a simple Node template
-  diagram.nodeTemplate = $(
-    go.Node,
-    'Auto',
+  diagram.nodeTemplate = 
+  $(
+    go.Node, 'Auto',
+    {
+      resizable: true, resizeObjectName: "Shape"
+    },
     new go.Binding('location', 'loc', go.Point.parse),
     $(
       go.Shape,
       'Circle',
       {
         fill: color,
+        name: "Shape",
         portId: '',
         cursor: 'pointer',
         fromLinkable: true,
         toLinkable: true,
         fromLinkableDuplicates: true,
         toLinkableDuplicates: true,
-        fromLinkableSelfNode: true,
-        toLinkableSelfNode: true,
       },
       new go.Binding('fill'),
     ),
     $(
       go.TextBlock,
-      { stroke: 'white', margin: 3 },
+      { editable: true, stroke: 'black', margin: 8, font: "bold 16px sans-serif" },
       new go.Binding('text', 'key'),
     ),
   );
 
+  diagram.linkTemplate = 
+      $(go.Link, { relinkableFrom: true, relinkableTo: true},
+        $(go.Shape),
+        $(go.Shape, { toArrow: "Standard"})
+      );
+
+  diagram.toolManager.relinkingTool.fromHandleArchetype =
+    $(go.Shape, "Diamond", { desiredSize: new go.Size(9, 9), stroke: "green", fill: "lime", segmentIndex: 0});
+  
+  diagram.toolManager.relinkingTool.toHandleArchetype =
+    $(go.Shape, "Diamond", { desiredSize: new go.Size(9, 9), stroke: "red", fill: "pink", segmentIndex: -1});
+      
+
   return diagram;
 }
 
-const Diagram = ({ ballArr, transcriptArr }: Props) => {
+let name = 1;
+
+const Diagram = ({ transcriptArr }: Props) => {
   const wordClickHandler = (word: string) => {
     console.log('word clicked');
-    const x = Math.random() * 150,
-      y = Math.random() * 150;
+    const x = Math.random() * 900,
+      y = Math.random() * 300;
     const color = random_rgba();
     model.addNodeData({ key: word, fill: color, loc: `${x} ${y}` });
-    diagram.model = model;
+    diagram.model = model; 
   };
-
-  //   const wordClickHandler = useCallback(
-  //     (word: string) => {
-  //       setBallArr((prev) => [...prev, word]);
-  //     },
-  //     [ballArr],
-  //   );
 
   return (
     <Container>
@@ -92,11 +101,6 @@ const Diagram = ({ ballArr, transcriptArr }: Props) => {
         ))}
       </TranscriptBox>
 
-      {ballArr.map((ball, idx) => (
-        <>
-          <span key={idx}>{ball}</span>{' '}
-        </>
-      ))}
     </Container>
   );
 };
