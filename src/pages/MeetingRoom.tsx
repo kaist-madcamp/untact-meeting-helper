@@ -1,18 +1,22 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { routes } from '../routes/index';
-import { Link } from 'react-router-dom';
 import Button from '../components/UI/Button';
+import Diagram from '../components/Diagram/Diagram';
+import Header from '../components/UI/Header';
+import { Container } from '../components/Container';
 import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
+import PageTitle from '../components/PageTitle';
 
 interface Props {}
 
 export default function MeetingRoom(props: Props) {
-  const { transcript, resetTranscript } = useSpeechRecognition();
   const [transcriptArr, setTranscriptArr] = useState<string[]>([]);
   const [recording, setRecording] = useState(false);
+  const [ballArr, setBallArr] = useState<string[]>([]);
+
+  const { transcript, resetTranscript } = useSpeechRecognition();
 
   useEffect(() => {
     const newTranscriptArr = transcript.split(' ');
@@ -37,17 +41,11 @@ export default function MeetingRoom(props: Props) {
   }
 
   return (
-    <>
-      <Navigation>
-        <h1>Meeting room 입니다.</h1>
-        <Link to={routes.home}>Home</Link>
-        <br />
-        <Link to={routes.meetingRoom}>Meeting room</Link>
-      </Navigation>
+    <Container>
+      <PageTitle title={'Room'} />
+      <Header label={'Meeting room'} />
 
-      <Canvas></Canvas>
-
-      <TranscriptBox>{transcript}</TranscriptBox>
+      <Diagram ballArr={ballArr} transcriptArr={transcriptArr} />
 
       <Button type="mic" onClick={toggleListening}>
         {' '}
@@ -58,26 +56,9 @@ export default function MeetingRoom(props: Props) {
         {' '}
         Reset
       </Button>
-    </>
+    </Container>
   );
 }
-
-const Canvas = styled.div`
-  height: 350px;
-  border: 1px solid black;
-  padding: 10px 20px;
-  border-radius: 10px;
-`;
-
-const TranscriptBox = styled.div`
-  height: 50px;
-  width: 50%;
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid gray;
-  border-radius: 10px;
-  overflow: scroll;
-`;
 
 const RecordingIndicator = styled.span<{ recording: boolean }>`
   display: inline-block;
@@ -88,5 +69,3 @@ const RecordingIndicator = styled.span<{ recording: boolean }>`
   border-radius: 50%;
   margin-left: 9px;
 `;
-
-const Navigation = styled.div``;
