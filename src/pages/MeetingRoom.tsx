@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, createRef} from 'react';
 import styled from 'styled-components';
 import Button from '../components/UI/Button';
 import Diagram from '../components/Diagram/Diagram';
@@ -15,7 +15,9 @@ export default function MeetingRoom(props: Props) {
   const [transcriptArr, setTranscriptArr] = useState<string[]>([]);
   const [recording, setRecording] = useState(false);
   const { transcript, resetTranscript } = useSpeechRecognition();
+  const [screenFlag, setscreenFlag] = useState(false)
 
+  // const canvasRef = useRef<LegacyRef<ReactDiagram>>(null);
   useEffect(() => {
     // console.log('transcript', transcript);
     const newTranscriptArr = transcript.split(' ');
@@ -40,12 +42,16 @@ export default function MeetingRoom(props: Props) {
     alert("Browser doesn't support speech recognition.");
   }
 
+  const screenFun = () => {
+    setscreenFlag(true);
+  }
+
   return (
     <Container>
       <PageTitle title={'Room'} />
       <Header label={'Meeting room'} />
 
-      <Diagram transcriptArr={transcriptArr} />
+      <Diagram transcriptArr={transcriptArr} screenFlag={screenFlag}/>
 
       <Button type="mic" onClick={toggleListening}>
         {' '}
@@ -55,6 +61,10 @@ export default function MeetingRoom(props: Props) {
       <Button type="remove" onClick={resetTranscript}>
         {' '}
         Reset
+      </Button>
+      <Button type="screenshot" onClick={screenFun}>
+          {' '}
+          Take screenshot
       </Button>
     </Container>
   );

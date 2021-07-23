@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as go from 'gojs';
 import styled from 'styled-components';
 import { ReactDiagram } from 'gojs-react';
 import { random_rgba } from './utils';
 import './Diagram.css';
+import html2canvas from 'html2canvas';
 
 interface Props {
   transcriptArr: string[];
+  screenFlag: boolean;
 }
 
 let model: go.GraphLinksModel;
@@ -72,7 +74,34 @@ function initDiagram() {
 
 let name = 1;
 
-const Diagram = ({ transcriptArr }: Props) => {
+const Diagram = React.forwardRef(({ transcriptArr,screenFlag}: Props) => {
+  
+  const canvasRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    console.log('canvasRef:', canvasRef.current)
+    if (screenFlag) {
+      if(!canvasRef.current) return;
+      html2canvas(canvasRef.current, {}).then((canvas) => {
+        saveAs(canvas.toDataURL(), `pciture${name}.png`);
+      })
+      name++;
+    }
+  }, [screenFlag])
+
+  function saveAs(uri: string, filename: string) {
+    var link = document.createElement('a');
+    if (typeof link.download === 'string') {
+      link.href = uri;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      window.open(uri);
+    }
+  }
+  
   const wordClickHandler = (word: string) => {
     console.log('word clicked');
     const x = Math.random() * 900,
@@ -84,12 +113,14 @@ const Diagram = ({ transcriptArr }: Props) => {
 
   return (
     <Container>
-      <ReactDiagram
-        initDiagram={initDiagram}
-        divClassName="diagram-component"
-        nodeDataArray={[]}
-        skipsDiagramUpdate={true}
-      />
+      <div ref={canvasRef}>
+        <ReactDiagram
+          initDiagram={initDiagram}
+          divClassName="diagram-component"
+          nodeDataArray={[]}
+          skipsDiagramUpdate={true}
+        />
+      </div>
 
       <TranscriptBox>
         {transcriptArr.map((word, idx) => (
@@ -100,10 +131,9 @@ const Diagram = ({ transcriptArr }: Props) => {
           </>
         ))}
       </TranscriptBox>
-
     </Container>
   );
-};
+})
 
 const Container = styled.section`
   width: 100%;
