@@ -8,7 +8,6 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
 import PageTitle from '../components/PageTitle';
-import WebCam from '../components/Webcam/WebCam';
 
 interface Props {}
 
@@ -48,29 +47,26 @@ export default function MeetingRoom(props: Props) {
   }
 
   return (
-    <div>
-        <Container>
-          <PageTitle title={'Room'} />
-          <Header label={'Meeting room'} />
+    <Container>
+      <PageTitle title={'Room'} />
+      <Header label={'Meeting room'} />
 
-          <Diagram transcriptArr={transcriptArr} screenFlag={screenFlag}/>
+      <Diagram transcriptArr={transcriptArr} screenFlag={screenFlag}/>
 
-          <Button type="mic" onClick={toggleListening}>
-            {' '}
-            회의 시작
-            <RecordingIndicator recording={recording} />
-          </Button>
-          <Button type="remove" onClick={resetTranscript}>
-            {' '}
-            Reset
-          </Button>
-          <Button type="screenshot" onClick={screenFun}>
-              {' '}
-              Take screenshot
-          </Button>
-        </Container>
-      <WebCam/>
-    </div>
+      <Button type="mic" onClick={toggleListening}>
+        {' '}
+        회의 시작
+        <RecordingIndicator recording={recording} />
+      </Button>
+      <Button type="remove" onClick={resetTranscript}>
+        {' '}
+        Reset
+      </Button>
+      <Button type="screenshot" onClick={screenFun}>
+          {' '}
+          Take screenshot
+      </Button>
+    </Container>
   );
 }
 
