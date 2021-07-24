@@ -1,5 +1,4 @@
 import { useMutation } from 'react-query';
-import AuthLayout from '../components/auth/AuthLayout';
 import PageTitle from '../components/PageTitle';
 import FormBox from '../components/auth/FormBox';
 import Input from '../components/auth/Input';

@@ -32,8 +32,8 @@ const VideoPlayer = () => {
           <VideoContainer>
             <VideoTitle>
               {name || '대기방'}
-              <button onClick={sizeUp}>+</button>
               <button onClick={sizeDown}>-</button>
+              <button onClick={sizeUp}>+</button>
             </VideoTitle>
             <SVideo
               dynamicWidth={videoWidth}
@@ -64,10 +64,11 @@ const VideoPlayer = () => {
 const Container = styled.div`
   display: flex;
   justify-content: center;
-  width: 100%;
+  cursor: pointer;
 `;
 
 const VideoTitle = styled.div`
+  background-color: #fff;
   padding: 10px;
   text-align: center;
   font-size: 24px;
