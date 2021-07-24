@@ -11,6 +11,7 @@ import { Title } from './Login';
 import { useHistory } from 'react-router-dom';
 import { createUserAPI } from '../lib/api/auth';
 import styled from 'styled-components';
+import { useState } from 'react';
 
 interface SignUpFormField {
   email: string;
@@ -21,7 +22,7 @@ interface Props {
   toggleAuthTypeHandler: () => void;
 }
 export default function SignUp({ toggleAuthTypeHandler }: Props) {
-  const history = useHistory();
+  const [signUpSuccess, setSignUpsuccess] = useState(false);
   const { mutateAsync, isLoading } = useMutation(createUserAPI);
 
   const {
@@ -43,11 +44,7 @@ export default function SignUp({ toggleAuthTypeHandler }: Props) {
       });
       console.log(res);
       if (res.data.ok) {
-        history.push(routes.home, {
-          message: '계정이 생성되었습니다. 로그인 해주세요.',
-          email,
-          password,
-        });
+        setSignUpsuccess(true);
       } else {
         alert(res.data.error);
       }
@@ -65,6 +62,7 @@ export default function SignUp({ toggleAuthTypeHandler }: Props) {
       <FormBox>
         <Title>Meeting Helper</Title>
         <h2>언텍트 시대, 화상 회의 도우미</h2>
+        {signUpSuccess && <Notification>로그인 성공!</Notification>}
         <form onSubmit={handleSubmit(onSubmitValid)}>
           <Input
             {...register('email', {
@@ -124,5 +122,10 @@ export default function SignUp({ toggleAuthTypeHandler }: Props) {
     </Container>
   );
 }
+
+const Notification = styled.div`
+  color: #2ecc71;
+  font-weight: bold;
+`;
 
 const Container = styled.div``;

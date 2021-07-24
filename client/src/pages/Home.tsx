@@ -1,19 +1,16 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { routes } from '../routes/index';
-import Header from '../components/UI/Header';
-import { Container } from '../components/Container';
-import PageTitle from '../components/PageTitle';
+import PageLayout from '../components/PageLayout';
 
 interface Props {
-  useAuthInput: [boolean, (token: string | undefined) => void];
+  useAuthInput: [boolean, (userId: string | undefined) => void];
 }
 
 export default function Home({ useAuthInput }: Props) {
   return (
-    <Container>
-      <PageTitle title={'Home'} />
-      <Header useAuthInput={useAuthInput} />
-    </Container>
+    <PageLayout title="home" useAuthInput={useAuthInput}>
+      <h1>home page입니다.</h1>
+    </PageLayout>
   );
 }
