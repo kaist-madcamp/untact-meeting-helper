@@ -38,13 +38,14 @@ export default function WebCam(props: Props) {
 
   return (
     <div className={classes.wrapper}>
-      <Header label={'room'} />
-      <AppBar className={classes.appBar} position="static" color="inherit">
+      <Header label={''} />
+      {/* <Header label={'room'} /> */}
+      {/* <AppBar className={classes.appBar} position="static" color="inherit">
         <Typography variant="h4" align="center" color="primary">
           {' '}
           Meeting Assistant
         </Typography>
-      </AppBar>
+      </AppBar> */}
 
       <VideoPlayer />
 

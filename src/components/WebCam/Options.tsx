@@ -24,18 +24,18 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   container: {
-    width: '500px', //600
-    margin: '30px 0', //35
+    width: '380px', //600
+    margin: '0px 0', //35
     padding: 0,
     [theme.breakpoints.down('xs')]: {
-      width: '80%',
+      width: '80%', //80
     },
   },
   margin: {
     marginTop: 10, //20
   },
   padding: {
-    padding: 10, //20
+    padding: 5, //20
   },
   paper: {
     padding: '5px 5px', //10, 20
@@ -61,6 +61,7 @@ const Options = ({ children }: Props) => {
       <Paper elevation={10} className={classes.paper}>
         <form className={classes.root} noValidate autoComplete="off">
           <Grid container className={classes.gridContainer}>
+
             <Grid item xs={12} md={6} className={classes.padding}>
               {/* <Typography gutterBottom variant="h6">Account Info</Typography> */}
               <TextField
@@ -77,6 +78,7 @@ const Options = ({ children }: Props) => {
                   color="primary"
                   fullWidth
                   startIcon={<Assignment fontSize="large" />}
+                  className={classes.margin}
                 >
                   Copy room id
                 </Button>
