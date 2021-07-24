@@ -153,7 +153,7 @@ const Diagram = React.forwardRef(({ transcriptArr, screenFlag }: Props) => {
 });
 
 const Container = styled.section`
-  width: 230%;
+  width: 100%;
 `;
 
 const TranscriptBox = styled.div`
