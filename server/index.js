@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const userRouter = require('./src/routes/user');
 const dbURL = 'mongodb://localhost:27017/meeting_helper'
 // 익스프레스 객체 생성
-var app = express();
+const app = express();
 
 //mongodb 연결 및 설정
 mongoose.connect(dbURL, {
@@ -16,11 +16,11 @@ mongoose.connect(dbURL, {
 mongoose.set('useFindAndModify', false);
 
 const db = mongoose.connection;
-db.on('error', function(){
-    console.log('Connection Failed!');
+db.on('error', function () {
+  console.log('Connection Failed!');
 });
-db.once('open', function() {
-    console.log('DB Connected!');
+db.once('open', function () {
+  console.log('DB Connected!');
 });
 
 app.use(bodyParser.json());
@@ -32,7 +32,7 @@ app.use(bodyParser.urlencoded({
 app.set('port', process.env.PORT || 80);
 
 app.get('/', (req, res) => {
-    res.status(418).send("EveryClub Start");
+  res.status(418).send("EveryClub Start");
 });
 
 //router 연결
@@ -45,6 +45,6 @@ app.use('/user', userRouter);
 
 const server = http.createServer(app);
 
-server.listen(80, ()=>{
-    console.log("Listening on port 80...")
+server.listen(80, () => {
+  console.log("Listening on port 80...")
 })
