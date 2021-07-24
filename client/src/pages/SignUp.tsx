@@ -11,14 +11,17 @@ import { useForm } from 'react-hook-form';
 import { Title } from './Login';
 import { useHistory } from 'react-router-dom';
 import { createUserAPI } from '../lib/api/auth';
+import styled from 'styled-components';
 
 interface SignUpFormField {
   email: string;
   name: string;
   password: string;
 }
-
-export default function SignUp() {
+interface Props {
+  toggleAuthTypeHandler: () => void;
+}
+export default function SignUp({ toggleAuthTypeHandler }: Props) {
   const history = useHistory();
   const { mutateAsync, isLoading } = useMutation(createUserAPI);
 
@@ -54,8 +57,11 @@ export default function SignUp() {
     }
   };
 
+  const bubbleClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+  };
   return (
-    <AuthLayout>
+    <Container onClick={bubbleClickHandler}>
       <PageTitle title="Sign up" />
       <FormBox>
         <Title>Meeting Helper</Title>
@@ -114,8 +120,10 @@ export default function SignUp() {
       <BottomBox
         title="계정이 있으신가요?"
         description="로그인"
-        link={routes.home}
+        toggleAuthTypeHandler={toggleAuthTypeHandler}
       />
-    </AuthLayout>
+    </Container>
   );
 }
+
+const Container = styled.div``;

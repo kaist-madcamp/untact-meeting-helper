@@ -5,14 +5,20 @@ import { Link } from 'react-router-dom';
 interface Props {
   title: string;
   description: string;
-  link: string;
+  toggleAuthTypeHandler: () => void;
 }
 
-export default function BottomBox({ title, description, link }: Props) {
+export default function BottomBox({
+  title,
+  description,
+  toggleAuthTypeHandler,
+}: Props) {
   return (
     <SBottomBox>
       <span>{description}</span>
-      <Link to={link}>{title}</Link>
+      <span className="title" onClick={toggleAuthTypeHandler}>
+        {title}
+      </span>
     </SBottomBox>
   );
 }
@@ -30,5 +36,13 @@ const SBottomBox = styled(BaseBox)`
   a {
     color: ${(props) => props.theme.accent};
     font-weight: 600;
+  }
+  .title {
+    font-weight: bold;
+    color: rgb(63, 81, 181);
+    cursor: pointer;
+  }
+  .title:hover {
+    text-decoration: underline;
   }
 `;
