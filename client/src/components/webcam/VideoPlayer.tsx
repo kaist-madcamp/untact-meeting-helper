@@ -2,10 +2,10 @@ import React, { useContext, useState } from 'react';
 import { Grid, Typography, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { SocketContext } from '../../providers/SocketProvider';
+import Draggable from 'react-draggable';
 
 const VideoPlayer = () => {
-
-  const [videoWidth, setvideoWidth] = useState("50px")
+  const [videoWidth, setvideoWidth] = useState("500px")
 
   const useStyles = makeStyles((theme) => ({
     video: {
@@ -48,7 +48,8 @@ const VideoPlayer = () => {
 
 
   return (
-    <Grid container className={classes.gridContainer}>
+    <Draggable>
+      <Grid container className={classes.gridContainer}>
       {stream && (
         //   Our own video
         <Paper className={classes.paper}>
@@ -85,6 +86,7 @@ const VideoPlayer = () => {
         </Paper>
       )}
     </Grid>
+    </Draggable>
   );
 };
 

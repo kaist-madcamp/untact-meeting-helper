@@ -8,6 +8,7 @@ interface Props {
   useAuthInput: [boolean, (token: string | undefined) => void];
 }
 
+
 export default function WebCam({ useAuthInput }: Props) {
   return (
     <div>
