@@ -31,6 +31,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     width: '100%',
   },
+  rightallign: {
+    justifyContent: 'right',
+    alignItems: 'right',
+    marginLeft: 'auto'
+  },
 }));
 
 export default function WebCam(props: Props) {
@@ -47,11 +52,14 @@ export default function WebCam(props: Props) {
         </Typography>
       </AppBar> */}
 
-      <VideoPlayer />
-
-      <Options>
-        <Notifications />
-      </Options>
+      <div className = {classes.rightallign}>
+        <VideoPlayer />
+        <Options>
+          <Notifications />
+        </Options>
+      </div>
+      
     </div>
+    // <div></div>
   );
 }

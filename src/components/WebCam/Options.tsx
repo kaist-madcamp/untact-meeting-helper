@@ -3,10 +3,7 @@ import { Button, TextField, Grid, Container, Paper } from '@material-ui/core';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Assignment, Phone, PhoneDisabled } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  SocketContext,
-  SocketContextProvider,
-} from '../../providers/SocketProvider';
+import { SocketContext} from '../../providers/SocketProvider';
 
 interface Props {
   children: React.ReactNode;
@@ -18,14 +15,16 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   gridContainer: {
-    width: '100%', //100
+    // justify: 'flex-end',
+    width: '200%', //100
+    flexDirection: 'column',
     [theme.breakpoints.down('xs')]: {
       flexDirection: 'column',
     },
   },
   container: {
-    width: '380px', //600
-    margin: '0px 0', //35
+    width: '300px', //600
+    margin: '1px 1', //35
     padding: 0,
     [theme.breakpoints.down('xs')]: {
       width: '80%', //80
@@ -59,6 +58,7 @@ const Options = ({ children }: Props) => {
   return (
     <Container className={classes.container}>
       <Paper elevation={10} className={classes.paper}>
+
         <form className={classes.root} noValidate autoComplete="off">
           <Grid container className={classes.gridContainer}>
 

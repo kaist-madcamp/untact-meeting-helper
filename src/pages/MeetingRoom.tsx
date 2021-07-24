@@ -9,13 +9,82 @@ import SpeechRecognition, {
 } from 'react-speech-recognition';
 import PageTitle from '../components/PageTitle';
 
+
+import { Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import Notifications from '../components/WebCam/Notifications';
+import Options from '../components/WebCam/Options';
+import VideoPlayer from '../components/WebCam/VideoPlayer';
+
+const useStyles = makeStyles((theme) => ({
+  appBar: {
+    borderRadius: 25, //15
+    margin: '30px 100px', //30, 100
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '350px', //600
+    border: '2px solid black',
+
+    [theme.breakpoints.down('xs')]: {
+      width: '90%',
+    },
+  },
+  image: {
+    marginLeft: '15px',
+  },
+  wrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '100%',
+  },
+  
+  rightallign: {
+    // justifyContent: 'right',
+    // alignItems: 'right',
+    marginLeft: 'auto'
+  },
+
+  gridContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginLeft: '300px',
+  },
+}));
+
+// export default function WebCam(props: Props) {
+//   const classes = useStyles();
+
+//   return (
+//     <div className={classes.wrapper}>
+//       <Header label={''} />
+//       {/* <Header label={'room'} /> */}
+//       {/* <AppBar className={classes.appBar} position="static" color="inherit">
+//         <Typography variant="h4" align="center" color="primary">
+//           {' '}
+//           Meeting Assistant
+//         </Typography>
+//       </AppBar> */}
+//       <div className = {classes.rightallign}>
+//         <VideoPlayer />
+//         <Options>
+//           <Notifications />
+//         </Options>
+//       </div>
+//     </div>
+//     // <div></div>
+//   );
+// }
 interface Props {}
 
 export default function MeetingRoom(props: Props) {
   const [transcriptArr, setTranscriptArr] = useState<string[]>([]);
   const [recording, setRecording] = useState(false);
   const { transcript, resetTranscript } = useSpeechRecognition();
-  const [screenFlag, setscreenFlag] = useState(false)
+  const [screenFlag, setscreenFlag] = useState(false);
+  const classes = useStyles();
 
   // const canvasRef = useRef<LegacyRef<ReactDiagram>>(null);
   useEffect(() => {
@@ -47,25 +116,46 @@ export default function MeetingRoom(props: Props) {
   }
 
   return (
+
     <Container>
       <PageTitle title={'Room'} />
       <Header label={'Meeting room'} />
 
-      <Diagram transcriptArr={transcriptArr} screenFlag={screenFlag}/>
+      <Grid container className={classes.gridContainer}>
+        
+        <Container>
+          <Diagram transcriptArr={transcriptArr} screenFlag={screenFlag}/>
 
-      <Button type="mic" onClick={toggleListening}>
-        {' '}
-        회의 시작
-        <RecordingIndicator recording={recording} />
-      </Button>
-      <Button type="remove" onClick={resetTranscript}>
-        {' '}
-        Reset
-      </Button>
-      <Button type="screenshot" onClick={screenFun}>
-          {' '}
-          Take screenshot
-      </Button>
+          {/* <VideoPlayer/>
+          <Notifications/> */}
+          
+          <Button type="mic" onClick={toggleListening}>
+            {' '}
+            회의 시작
+            <RecordingIndicator recording={recording} />
+          </Button>
+          <Button type="remove" onClick={resetTranscript}>
+            {' '}
+            Reset
+          </Button>
+          <Button type="screenshot" onClick={screenFun}>
+              {' '}
+              Take screenshot
+          </Button>
+        </Container>
+
+        <Container>
+            <div className={classes.wrapper}>
+              <div className = {classes.rightallign}>
+                <VideoPlayer />
+                <Options>
+                  <Notifications />
+                </Options>
+              </div>
+            </div>
+        </Container>
+        
+      </Grid>
     </Container>
   );
 }

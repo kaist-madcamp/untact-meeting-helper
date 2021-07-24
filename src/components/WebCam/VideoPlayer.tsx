@@ -11,7 +11,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   gridContainer: {
-    justifyContent: 'center',
+    justify: 'center',
+    // alignContent: 'flex-end',
+    flexDirection: 'column',
+    width: '300px',
     [theme.breakpoints.down('xs')]: {
       flexDirection: 'column',
     },
