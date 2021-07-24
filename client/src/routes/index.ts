@@ -4,4 +4,5 @@ export const routes = {
   signUp: '/signUp',
   meetingRoom: '/meeting-room',
   webcam: '/webcam',
+  uploadPost: '/upload-post'
 };

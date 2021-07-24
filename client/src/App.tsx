@@ -11,6 +11,7 @@ import { GlobalStyles } from './styles/styles';
 import Backdrop from './components/UI/Backdrop';
 import { PortalProvider } from './providers/PortalProvider';
 import WebCam from './pages/WebCam';
+import UploadPost from './pages/UploadPost';
 
 function App() {
   const [isLoggedIn, toggleAuth] = useAuth();
@@ -32,6 +33,10 @@ function App() {
 
           <Route path={routes.meetingRoom}>
             <MeetingRoom useAuthInput={[isLoggedIn, toggleAuth]} />
+          </Route>
+
+          <Route path={routes.uploadPost}>
+            <UploadPost/>
           </Route>
         </Switch>
       </HelmetProvider>

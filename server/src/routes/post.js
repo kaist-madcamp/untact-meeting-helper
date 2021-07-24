@@ -25,14 +25,13 @@ var upload = multer({ storage: storage }).single("file")
 //=================================
 //             Post
 //=================================
-
 router.post("/uploadImage", (req, res) => {
     console.log("uploadImage")
-    upload(req, res, err => {
-        if (err) {
-            return res.json({ success: false, err })
+    upload(req, res, error => {
+        if (error) {
+            return res.json({ ok: false, error })
         }
-        return res.json({ success: true, image: res.req.file.path, fileName: res.req.file.filename })
+        return res.json({ ok: true, image: res.req.file.path, fileName: res.req.file.filename })
     })
 
 });
@@ -44,9 +43,9 @@ router.post("/uploadPost", (req, res) => {
     console.log("/posts/uploadPost")
     //save all the data we got from the client into the DB 
     const post = new Post(req.body)
-    post.save((err) => {
-        if (err) return res.status(400).json({ success: false, err })
-        return res.status(200).json({ success: true })
+    post.save((error) => {
+        if (error) return res.status(400).json({ ok: false, error })
+        return res.status(200).json({ ok: true })
     })
 
 });
@@ -57,9 +56,9 @@ router.get("/getPosts", (req, res) => {
     Post.find()
         .sort({updatedAt: -1})
         .populate("writer")
-        .exec((err, posts) => {
-            if(err) return res.status(400).json({success: false})
-            return res.status(200).json({success: true, posts})
+        .exec((error, posts) => {
+            if(error) return res.status(400).json({ok: false})
+            return res.status(200).json({ok: true, posts})
         })
 
 });
@@ -71,9 +70,9 @@ router.post("/post_by_id", (req, res) => {
     //we need to find the product information that belong to product Id 
     Post.findOne({"_id": postId})
         .populate('writer')
-        .exec((err, post) => {
-            if (err) return res.status(400).send(err)
-            return res.status(200).json({success: true, post})
+        .exec((error, post) => {
+            if (error) return res.status(400).send(error)
+            return res.status(200).json({ok: true, post})
         })
 });
 
@@ -83,17 +82,17 @@ router.post("/posts_by_user", (req, res) => {
     //we need to find the product information that belong to product Id 
     Post.find({"writer": req.body.writer})
         .populate('writer')
-        .exec((err, posts) => {
-            if (err) return res.status(400).send(err)
-            return res.status(200).json({success: true, posts})
+        .exec((error, posts) => {
+            if (error) return res.status(400).send(error)
+            return res.status(200).json({ok: true, posts})
         })
 });
 
 router.delete("/delete", (req, res) => {
     console.log('post_delete')
-    Post.findOneAndDelete({"_id": req.body.postId}, (err, post) => {
-        if (err) return res.status(400).send(err)
-        return res.status(200).json({success: true, post})
+    Post.findOneAndDelete({"_id": req.body.postId}, (error, post) => {
+        if (error) return res.status(400).send(error)
+        return res.status(200).json({ok: true, post})
     })
 })
 
@@ -114,9 +113,9 @@ router.put("/update", (req, res) => {
         {
             new: true
         },
-        (err, post) => {
-            if (err) return res.status(400).send(err)
-            return res.status(200).json({success: true, post})
+        (error, post) => {
+            if (error) return res.status(400).send(error)
+            return res.status(200).json({ok: true, post})
         }
         
     )

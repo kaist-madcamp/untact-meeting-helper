@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { routes } from '../../routes/index';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHandshake, faHouseUser } from '@fortawesome/free-solid-svg-icons';
+import { faHandshake, faHouseUser, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import Backdrop from './Backdrop';
 import Login from '../../pages/Login';
@@ -38,6 +38,9 @@ export default function Header({ useAuthInput }: Props) {
             </Link>
             <Link to={routes.meetingRoom}>
               <FontAwesomeIcon icon={faHandshake} />
+            </Link>
+            <Link to={routes.uploadPost}>
+              <FontAwesomeIcon icon={faUpload}/>
             </Link>
           </>
         ) : (
