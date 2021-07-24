@@ -7,7 +7,7 @@ export interface Props {
 export default function PageTitle({ title }: Props) {
   return (
     <Helmet>
-      <title> {title} | Meeting helper </title>
+      <title> {title} | Meeting Assistant </title>
     </Helmet>
   );
 }
