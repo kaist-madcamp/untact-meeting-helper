@@ -8,18 +8,18 @@ const SButton = styled.button<Props>`
   border: none;
   color: #fff;
   margin-top: 15px;
-  background-color: ${(props) => props.theme.accent};
+  background-color: rgb(63, 81, 181);
   padding: 8px 0;
   font-weight: 600;
   border-radius: 3px;
-  opacity: ${props => props.disabled ? .3 : 1};
+  opacity: ${(props) => (props.disabled ? 0.3 : 1)};
   cursor: pointer;
   svg {
     margin-right: 10px;
     font-size: 16px;
   }
   &:focus {
-      outline: none;
+    outline: none;
   }
 `;
 

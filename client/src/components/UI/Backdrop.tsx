@@ -34,9 +34,8 @@ const BackdropContainer = styled.div<{ close: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(249, 249, 249, 0.9);
-  opacity: 0;
-  transition: ${(props) => (props.close ? 'opacity 0.5s' : 'opacity 0.3s')};
+  background-color: rgba(249, 249, 249, 0.95);
   opacity: ${(props) => (props.close ? 0 : 1)};
+  transition: ${(props) => !props.close && 'opacity 0.3s'};
   z-index: ${(props) => (props.close ? -10 : 10)};
 `;

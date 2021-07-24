@@ -26,7 +26,7 @@ interface LocationState {
 }
 
 interface Props {
-  useAuthInput: [boolean, (token: string | undefined) => void];
+  useAuthInput: [boolean, (userId: string | undefined) => void];
   toggleAuthTypeHandler: () => void;
 }
 
@@ -49,7 +49,6 @@ export default function Login({ useAuthInput, toggleAuthTypeHandler }: Props) {
 
   const onSubmitValid = async (data: LoginFormField) => {
     if (isLoading) return null;
-    console.log(data);
     const { email, password } = data;
     try {
       const res = await mutateAsync({
@@ -57,7 +56,8 @@ export default function Login({ useAuthInput, toggleAuthTypeHandler }: Props) {
         password,
       });
       if (res.data.ok) {
-        useAuthInput[1](res.data.token);
+        useAuthInput[1](res.data.userId);
+        window.location.href = '/home';
       } else {
         setReqErrorMessage(res.data.error!);
       }
@@ -73,7 +73,7 @@ export default function Login({ useAuthInput, toggleAuthTypeHandler }: Props) {
     >
       <PageTitle title="Login" />
       <FormBox>
-        <Title>Meeting helper</Title>
+        <Title>Meeting Assistant</Title>
         <Notification>{location?.state?.message}</Notification>
         <form onSubmit={handleSubmit(onSubmitValid)}>
           <Input

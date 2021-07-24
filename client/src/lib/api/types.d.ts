@@ -14,5 +14,5 @@ interface LoginUserInput {
   password: string;
 }
 interface LoginUserOutput extends CoreOutput {
-  token?: string;
+  userId?: string;
 }

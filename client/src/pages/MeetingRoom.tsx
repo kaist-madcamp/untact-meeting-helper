@@ -3,18 +3,17 @@ import styled from 'styled-components';
 import Button from '../components/UI/Button';
 import Diagram from '../components/diagram/Diagram';
 import Header from '../components/UI/Header';
-import { Container } from '../components/Container';
 import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
 import PageTitle from '../components/PageTitle';
-import WebCam from './WebCam';
 import VideoPlayer from '../components/webcam/VideoPlayer';
 import Options from '../components/webcam/Options';
 import Notifications from '../components/webcam/Notifications';
+import PageLayout from '../components/PageLayout';
 
 interface Props {
-  useAuthInput: [boolean, (token: string | undefined) => void];
+  useAuthInput: [boolean, (userId: string | undefined) => void];
 }
 
 export default function MeetingRoom({ useAuthInput }: Props) {
@@ -29,9 +28,7 @@ export default function MeetingRoom({ useAuthInput }: Props) {
     }
   }, []);
 
-  // const canvasRef = useRef<LegacyRef<ReactDiagram>>(null);
   useEffect(() => {
-    // console.log('transcript', transcript);
     const newTranscriptArr = transcript.split(' ');
     setTranscriptArr(newTranscriptArr);
     console.log('newTranscriptArr', newTranscriptArr);
@@ -55,11 +52,8 @@ export default function MeetingRoom({ useAuthInput }: Props) {
   };
 
   return (
-    <>
-      <Container>
-        <PageTitle title={'Room'} />
-        <Header useAuthInput={useAuthInput} />
-
+    <PageLayout title="Room" useAuthInput={useAuthInput}>
+      <DiagramContainer>
         <Diagram transcriptArr={transcriptArr} screenFlag={screenFlag} />
 
         <Button type="mic" onClick={toggleListening}>
@@ -75,18 +69,21 @@ export default function MeetingRoom({ useAuthInput }: Props) {
           {' '}
           Take screenshot
         </Button>
-      </Container>
+      </DiagramContainer>
 
-      <Container>
+      <FaceContainer>
         <VideoPlayer />
-
         <Options>
           <Notifications />
         </Options>
-      </Container>
-    </>
+      </FaceContainer>
+    </PageLayout>
   );
 }
+
+const DiagramContainer = styled.div``;
+
+const FaceContainer = styled.div``;
 
 const RecordingIndicator = styled.span<{ recording: boolean }>`
   display: inline-block;

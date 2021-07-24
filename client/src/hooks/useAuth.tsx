@@ -1,22 +1,23 @@
 import { useState } from 'react';
 
-export const TOKEN = 'TOKEN';
+export const USER_ID = 'USER_ID';
 
 export default function useAuth(): [
   boolean,
-  (token: string | undefined) => void,
+  (userId: string | undefined) => void,
 ] {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
-    Boolean(localStorage.getItem(TOKEN)),
+    Boolean(localStorage.getItem(USER_ID)),
   );
 
-  const toggleLogInOut = (token: string | undefined) => {
+  const toggleLogInOut = (userId: string | undefined) => {
     if (isLoggedIn) {
-      localStorage.removeItem(TOKEN);
+      localStorage.removeItem(USER_ID);
       setIsLoggedIn(false);
     } else {
-      if (!token) return;
-      localStorage.setItem(TOKEN, token);
+      if (!userId) return;
+      console.log('user ID : ', userId);
+      localStorage.setItem(USER_ID, userId);
       setIsLoggedIn(true);
     }
   };
