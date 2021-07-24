@@ -1,27 +1,8 @@
 import React, { useContext } from 'react';
+import styled from 'styled-components';
 import { Grid, Typography, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { SocketContext } from '../../providers/SocketProvider';
-
-const useStyles = makeStyles((theme) => ({
-  video: {
-    width: '650px', //550
-    [theme.breakpoints.down('xs')]: {
-      width: '300px', //300
-    },
-  },
-  gridContainer: {
-    justifyContent: 'center',
-    [theme.breakpoints.down('xs')]: {
-      flexDirection: 'column',
-    },
-  },
-  paper: {
-    padding: '0px', //10
-    border: '2px solid black', //2
-    margin: '5px', //10
-  },
-}));
 
 const VideoPlayer = () => {
   const {
@@ -33,45 +14,48 @@ const VideoPlayer = () => {
     stream,
     call,
   } = useContext(SocketContext);
-  const classes = useStyles();
 
   return (
-    <Grid container className={classes.gridContainer}>
+    <Container>
       {stream && (
         //   Our own video
-        <Paper className={classes.paper}>
-          <Grid item xs={12} md={6}>
-            <Typography variant="h5" gutterBottom>
-              {name || 'Name'}
-            </Typography>
-            <video
-              playsInline
-              muted
-              ref={myVideo}
-              autoPlay
-              className={classes.video}
-            />
-          </Grid>
-        </Paper>
+        <VideoContainer>
+          <VideoTitle>{name || '대기방'}</VideoTitle>
+          <SVideo playsInline muted ref={myVideo} autoPlay />
+        </VideoContainer>
       )}
       {callAccepted && !callEnded && (
         // users video
-        <Paper className={classes.paper}>
-          <Grid item xs={12} md={6}>
-            <Typography variant="h5" gutterBottom>
-              {call?.name || 'Name'}
-            </Typography>
-            <video
-              playsInline
-              ref={userVideo}
-              autoPlay
-              className={classes.video}
-            />
-          </Grid>
-        </Paper>
+        <VideoContainer>
+          <VideoTitle>{call?.name || 'Name'}</VideoTitle>
+          <SVideo playsInline ref={userVideo} autoPlay />
+        </VideoContainer>
       )}
-    </Grid>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+`;
+
+const VideoTitle = styled.div`
+  padding: 10px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 500;
+`;
+
+const VideoContainer = styled.div`
+  padding: 0px;
+  border: 2px solid black;
+  margin: 5px;
+`;
+
+const SVideo = styled.video`
+  width: 650px;
+`;
 
 export default VideoPlayer;
