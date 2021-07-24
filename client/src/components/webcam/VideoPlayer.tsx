@@ -1,10 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
-import { Grid, Typography, Paper } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import { SocketContext } from '../../providers/SocketProvider';
+import Draggable from 'react-draggable';
 
 const VideoPlayer = () => {
+  const [videoWidth, setvideoWidth] = useState('500px');
+
   const {
     name,
     callAccepted,
@@ -15,23 +16,48 @@ const VideoPlayer = () => {
     call,
   } = useContext(SocketContext);
 
+  const sizeUp = () => {
+    setvideoWidth('800px');
+  };
+
+  const sizeDown = () => {
+    setvideoWidth('300px');
+  };
+
   return (
-    <Container>
-      {stream && (
-        //   Our own video
-        <VideoContainer>
-          <VideoTitle>{name || '대기방'}</VideoTitle>
-          <SVideo playsInline muted ref={myVideo} autoPlay />
-        </VideoContainer>
-      )}
-      {callAccepted && !callEnded && (
-        // users video
-        <VideoContainer>
-          <VideoTitle>{call?.name || 'Name'}</VideoTitle>
-          <SVideo playsInline ref={userVideo} autoPlay />
-        </VideoContainer>
-      )}
-    </Container>
+    <Draggable>
+      <Container>
+        {stream && (
+          //   Our own video
+          <VideoContainer>
+            <VideoTitle>
+              {name || '대기방'}
+              <button onClick={sizeUp}>+</button>
+              <button onClick={sizeDown}>-</button>
+            </VideoTitle>
+            <SVideo
+              dynamicWidth={videoWidth}
+              playsInline
+              muted
+              ref={myVideo}
+              autoPlay
+            />
+          </VideoContainer>
+        )}
+        {callAccepted && !callEnded && (
+          // users video
+          <VideoContainer>
+            <VideoTitle>{call?.name || 'Name'}</VideoTitle>
+            <SVideo
+              dynamicWidth={videoWidth}
+              playsInline
+              ref={userVideo}
+              autoPlay
+            />
+          </VideoContainer>
+        )}
+      </Container>
+    </Draggable>
   );
 };
 
@@ -54,8 +80,8 @@ const VideoContainer = styled.div`
   margin: 5px;
 `;
 
-const SVideo = styled.video`
-  width: 650px;
+const SVideo = styled.video<{ dynamicWidth: string }>`
+  width: ${(props) => props.dynamicWidth || '650px'};
 `;
 
 export default VideoPlayer;

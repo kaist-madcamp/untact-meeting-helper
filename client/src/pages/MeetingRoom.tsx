@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, createRef} from 'react';
 import styled from 'styled-components';
 import Button from '../components/UI/Button';
 import Diagram from '../components/diagram/Diagram';
@@ -25,9 +25,12 @@ export default function MeetingRoom({ useAuthInput }: Props) {
     }
   }, []);
 
+  // const canvasRef = useRef<LegacyRef<ReactDiagram>>(null);
   useEffect(() => {
+    // console.log('transcript', transcript);
     const newTranscriptArr = transcript.split(' ');
     setTranscriptArr(newTranscriptArr);
+    console.log('newTranscriptArr', newTranscriptArr);
   }, [transcript]);
 
   const toggleListening = useCallback(() => {
