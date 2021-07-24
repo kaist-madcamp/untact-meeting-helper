@@ -13,6 +13,7 @@ export default function Header({ label }: Props) {
       <Navigation>
         <Link to={routes.home}>Home</Link>
         <Link to={routes.meetingRoom}>Meeting room</Link>
+        <Link to="webcam">Web cam</Link>
       </Navigation>
     </SHeader>
   );
@@ -25,10 +26,11 @@ const SHeader = styled.div`
 
 const Navigation = styled.nav`
   display: flex;
-  flex: 0.5;
+  flex: 0.7;
   align-items: center;
   justify-content: center;
   a {
-    margin: 0 10px;
+    color: #fff;
+    margin: 10px 20px;
   }
 `;

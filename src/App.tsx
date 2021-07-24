@@ -4,12 +4,13 @@ import Home from './pages/Home';
 import MeetingRoom from './pages/MeetingRoom';
 import { routes } from './routes/index';
 import { HelmetProvider } from 'react-helmet-async';
-
-import webcam from './components/WebCam/App.js';
+import { GlobalStyles } from './styles/styles';
+import WebCam from './pages/WebCam';
 
 function App() {
   return (
     <HelmetProvider>
+      <GlobalStyles />
       <Switch>
         <Route path={routes.home} exact>
           <Home />
@@ -17,10 +18,11 @@ function App() {
 
         <Route path={routes.meetingRoom}>
           <MeetingRoom />
-          <webcam />
-
         </Route>
 
+        <Route path="/webcam">
+          <WebCam />
+        </Route>
       </Switch>
     </HelmetProvider>
   );
