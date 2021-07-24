@@ -10,7 +10,6 @@ import FormBox from '../components/auth/FormBox';
 import Input from '../components/auth/Input';
 import Button from '../components/auth/Button';
 import FormError from '../components/auth/FormError';
-import AuthLayout from '../components/auth/AuthLayout';
 import BottomBox from '../components/auth/BottomBox';
 import { SFormError } from '../components/auth/FormError';
 

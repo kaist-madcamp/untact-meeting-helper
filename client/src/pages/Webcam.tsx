@@ -9,18 +9,15 @@ interface Props {
   useAuthInput: [boolean, (token: string | undefined) => void];
 }
 
-
 export default function WebCam({ useAuthInput }: Props) {
   return (
     <Container>
       <Header useAuthInput={useAuthInput} />
       <VideoPlayer />
 
-      {/* <Options>
+      <Options>
         <Notifications />
-      </Options> */}
+      </Options>
     </Container>
   );
 }
-
-const Indicator = styled.div``;

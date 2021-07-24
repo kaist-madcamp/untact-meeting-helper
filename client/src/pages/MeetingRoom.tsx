@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, createRef} from 'react';
+import { useCallback, useEffect, useState, createRef } from 'react';
 import styled from 'styled-components';
 import Button from '../components/UI/Button';
 import Diagram from '../components/diagram/Diagram';
@@ -8,6 +8,10 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
 import PageTitle from '../components/PageTitle';
+import WebCam from './WebCam';
+import VideoPlayer from '../components/webcam/VideoPlayer';
+import Options from '../components/webcam/Options';
+import Notifications from '../components/webcam/Notifications';
 
 interface Props {
   useAuthInput: [boolean, (token: string | undefined) => void];
@@ -51,26 +55,36 @@ export default function MeetingRoom({ useAuthInput }: Props) {
   };
 
   return (
-    <Container>
-      <PageTitle title={'Room'} />
-      <Header useAuthInput={useAuthInput} />
+    <>
+      <Container>
+        <PageTitle title={'Room'} />
+        <Header useAuthInput={useAuthInput} />
 
-      <Diagram transcriptArr={transcriptArr} screenFlag={screenFlag} />
+        <Diagram transcriptArr={transcriptArr} screenFlag={screenFlag} />
 
-      <Button type="mic" onClick={toggleListening}>
-        {' '}
-        회의 시작
-        <RecordingIndicator recording={recording} />
-      </Button>
-      <Button type="remove" onClick={resetTranscript}>
-        {' '}
-        Reset
-      </Button>
-      <Button type="screenshot" onClick={screenFun}>
-        {' '}
-        Take screenshot
-      </Button>
-    </Container>
+        <Button type="mic" onClick={toggleListening}>
+          {' '}
+          회의 시작
+          <RecordingIndicator recording={recording} />
+        </Button>
+        <Button type="remove" onClick={resetTranscript}>
+          {' '}
+          Reset
+        </Button>
+        <Button type="screenshot" onClick={screenFun}>
+          {' '}
+          Take screenshot
+        </Button>
+      </Container>
+
+      <Container>
+        <VideoPlayer />
+
+        <Options>
+          <Notifications />
+        </Options>
+      </Container>
+    </>
   );
 }
 
