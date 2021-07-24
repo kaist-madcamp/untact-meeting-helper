@@ -20,8 +20,22 @@ router.get("/auth", auth, (req, res) => {
     });
 });
 
+router.post("/join", (req, res) => {
+    console.log('/user/register')
+    console.log(req.body)
+    const user = new User(req.body);
+
+    user.save((err, doc) => {
+        if (err) return res.json({ success: false, err });
+        return res.status(200).json({
+            success: true
+        });
+    });
+});
+
 
 router.post("/login", (req, res) => {
+    console.log("/user/login")
     User.findOne({ email: req.body.email }, (err, user) => {
         if (!user)
             return res.json({
@@ -110,20 +124,6 @@ router.put("/update", async (req, res) => {
                 return res.status(200).json({success: true, user})
         }
     )
-});
-
-
-router.post("/register", (req, res) => {
-    console.log('/user/register')
-    console.log(req.body)
-    const user = new User(req.body);
-
-    user.save((err, doc) => {
-        if (err) return res.json({ success: false, err });
-        return res.status(200).json({
-            success: true
-        });
-    });
 });
 
 module.exports = router;

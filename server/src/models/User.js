@@ -18,7 +18,6 @@ const userSchema = mongoose.Schema({
         type: String,
         minglength: 5
     },
-    image: String,
     token : {
         type: String,
     },

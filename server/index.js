@@ -7,7 +7,7 @@ const postRouter = require('./src/routes/post')
 const dbURL = 'mongodb://localhost:27017/meeting_helper'
 // 익스프레스 객체 생성
 var app = express();
-
+const cors = require('cors')
 //mongodb 연결 및 설정
 mongoose.connect(dbURL, {
   useNewUrlParser: true,
@@ -39,6 +39,7 @@ app.get('/', (req, res) => {
 });
 
 //router 연결
+app.use(cors())
 app.use('/user', userRouter);
 app.use('/post', postRouter);
 // Express 서버 시작
