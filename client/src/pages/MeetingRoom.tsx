@@ -48,7 +48,7 @@ export default function MeetingRoom({ useAuthInput }: Props) {
   }, [recording]);
 
   const screenFun = () => {
-    setscreenFlag(true);
+    setscreenFlag(!screenFlag);
   };
 
   return (

@@ -91,19 +91,21 @@ function initDiagram() {
 }
 
 let name = 1;
+let initFlag = false;
 
 const Diagram = React.forwardRef(({ transcriptArr, screenFlag }: Props) => {
   const canvasRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     console.log('canvasRef:', canvasRef.current);
-    if (screenFlag) {
+    if (initFlag) {
       if (!canvasRef.current) return;
       html2canvas(canvasRef.current, {}).then((canvas) => {
         saveAs(canvas.toDataURL(), `pciture${name}.png`);
       });
       name++;
     }
+    initFlag = true;
   }, [screenFlag]);
 
   function saveAs(uri: string, filename: string) {
