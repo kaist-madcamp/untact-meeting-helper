@@ -8,7 +8,7 @@ const { auth } = require("../middleware/auth");
 //             User
 //=================================
 
-// 192.249.10.18.120
+// 192.249.18.120
 
 router.get("/auth", auth, (req, res) => {
     res.status(200).json({
@@ -17,6 +17,19 @@ router.get("/auth", auth, (req, res) => {
         email: req.user.email,
         name: req.user.name,
         image: req.user.image,
+    });
+});
+
+router.post("/join", (req, res) => {
+    console.log('/user/join')
+    console.log(req.body)
+    const user = new User(req.body);
+
+    user.save((err, doc) => {
+        if (err) return res.json({ success: false, err });
+        return res.status(200).json({
+            success: true
+        });
     });
 });
 
@@ -110,20 +123,6 @@ router.put("/update", async (req, res) => {
                 return res.status(200).json({success: true, user})
         }
     )
-});
-
-
-router.post("/register", (req, res) => {
-    console.log('/user/register')
-    console.log(req.body)
-    const user = new User(req.body);
-
-    user.save((err, doc) => {
-        if (err) return res.json({ success: false, err });
-        return res.status(200).json({
-            success: true
-        });
-    });
 });
 
 module.exports = router;
