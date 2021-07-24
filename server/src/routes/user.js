@@ -25,10 +25,10 @@ router.post("/join", (req, res) => {
     console.log(req.body)
     const user = new User(req.body);
 
-    user.save((error, doc) => {
-        if (error) return res.json({ ok: false, error });
+    user.save((err, doc) => {
+        if (err) return res.json({ success: false, err });
         return res.status(200).json({
-            ok: true
+            success: true
         });
     });
 });
@@ -36,25 +36,25 @@ router.post("/join", (req, res) => {
 
 router.post("/login", (req, res) => {
     console.log("/user/login")
-    User.findOne({ email: req.body.email }, (error, user) => {
+    User.findOne({ email: req.body.email }, (err, user) => {
         if (!user)
             return res.json({
-                ok: false,
-                error: "Auth failed, email not found"
+                loginSuccess: false,
+                message: "Auth failed, email not found"
             });
 
-        user.comparePassword(req.body.password, (error, isMatch) => {
+        user.comparePassword(req.body.password, (err, isMatch) => {
             if (!isMatch)
-                return res.json({ ok: false, error: "Wrong password" });
+                return res.json({ loginSuccess: false, message: "Wrong password" });
 
-            user.generateToken((error, user) => {
-                if (error) return res.status(400).send(error);
+            user.generateToken((err, user) => {
+                if (err) return res.status(400).send(err);
                 res.cookie("w_authExp", user.tokenExp);
                 res
                     .cookie("w_auth", user.token)
                     .status(200)
                     .json({
-                        ok: true, userId: user._id
+                        loginSuccess: true, userId: user._id
                     });
             });
         });
@@ -62,10 +62,10 @@ router.post("/login", (req, res) => {
 });
 
 router.get("/logout", auth, (req, res) => {
-    User.findOneAndUpdate({ _id: req.user._id }, { token: "", tokenExp: "" }, (error, doc) => {
-        if (error) return res.json({ ok: false, error });
+    User.findOneAndUpdate({ _id: req.user._id }, { token: "", tokenExp: "" }, (err, doc) => {
+        if (err) return res.json({ success: false, err });
         return res.status(200).send({
-            ok: true
+            success: true
         });
     });
 });
@@ -73,9 +73,9 @@ router.get("/logout", auth, (req, res) => {
 router.post("/getUsers", (req, res) => {
 
     User.find()
-        .exec((error, users) => {
-            if (error) return res.status(400).json({ ok: false })
-            return res.status(200).json({ ok: true, users })
+        .exec((err, users) => {
+            if (err) return res.status(400).json({ success: false })
+            return res.status(200).json({ success: true, users })
         })
 
 });
@@ -86,10 +86,10 @@ router.post("/user_by_id", (req, res) => {
     console.log(userId)
     //we need to find the product information that belong to product Id 
     User.findOne({ "_id": userId })
-        .exec((error, user) => {
+        .exec((err, user) => {
             console.log("in func    " + user)
-            if (error) return res.status(400).send(error)
-            return res.status(200).json({ ok: true, user })
+            if (err) return res.status(400).send(err)
+            return res.status(200).json({ success: true, user })
         })
 });
 
@@ -117,11 +117,11 @@ router.put("/update", async (req, res) => {
         {
             new: true
         },
-        (error, user) => {
+        (err, user) => {
             console.log('user/update')
             console.log(user)
-            if (error) return res.status(400).send(error)
-                return res.status(200).json({ok: true, user})
+            if (err) return res.status(400).send(err)
+                return res.status(200).json({success: true, user})
         }
     )
 });

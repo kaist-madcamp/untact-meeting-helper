@@ -32,7 +32,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 // 기본 포트를 app 객체에 속성으로 설정
-app.set('port', 80);
+app.set('port', process.env.PORT || 80);
 
 app.get('/', (req, res) => {
     res.status(418).send("Meeting Start");
