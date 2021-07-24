@@ -79,7 +79,8 @@ export default function Header({ useAuthInput }: Props) {
 const SHeader = styled.div`
   display: flex;
   justify-content: flex-end;
-  padding: 10px 0 10px;
+  padding: 15px 0;
+  border-bottom: 1px solid black;
 `;
 
 const Navigation = styled.nav`
@@ -88,7 +89,7 @@ const Navigation = styled.nav`
   align-items: center;
   justify-content: center;
   svg {
-    margin: 0 10px;
+    margin: 0 20px;
     color: black;
   }
   a {

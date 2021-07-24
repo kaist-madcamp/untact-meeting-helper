@@ -28,13 +28,10 @@ const SBottomBox = styled(BaseBox)`
   justify-content: center;
   align-items: center;
   padding: 24px 0;
-  background-color: ${(props) => props.theme.bgColor};
   span {
-    color: ${(props) => props.theme.color};
     margin-right: 5px;
   }
   a {
-    color: ${(props) => props.theme.accent};
     font-weight: 600;
   }
   .title {
