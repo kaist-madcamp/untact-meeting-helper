@@ -8,7 +8,7 @@ import useAuth from './hooks/useAuth';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import { GlobalStyles } from './styles/styles';
-import WebCam from './pages/Webcam';
+import WebCam from './pages/WebCam';
 import Backdrop from './components/UI/Backdrop';
 import { PortalProvider } from './providers/PortalProvider';
 
