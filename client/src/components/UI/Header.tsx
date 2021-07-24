@@ -1,18 +1,19 @@
 import styled from 'styled-components';
 import { routes } from '../../routes/index';
 import { Link } from 'react-router-dom';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 interface Props {
-  label: string;
+  useAuthInput: [boolean, (token?: string | undefined) => void];
 }
 
-export default function Header({ label }: Props) {
+export default function Header({ useAuthInput }: Props) {
   return (
     <SHeader>
-      <h1>{label}</h1>
       <Navigation>
-        <Link to={routes.home}>Home</Link>
-        <Link to={routes.meetingRoom}>Meeting room</Link>
+        <Link to={routes.home}>홈</Link>
+        <Link to={routes.meetingRoom}></Link>
+        <button onClick={() => useAuthInput[1]()}>Log out</button>
       </Navigation>
     </SHeader>
   );
@@ -20,7 +21,8 @@ export default function Header({ label }: Props) {
 
 const SHeader = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+  padding: 10px 0 10px;
 `;
 
 const Navigation = styled.nav`

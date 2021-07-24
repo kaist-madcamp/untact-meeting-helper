@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, createRef} from 'react';
 import styled from 'styled-components';
 import Button from '../components/UI/Button';
-import Diagram from '../components/Diagram/Diagram';
+import Diagram from '../components/diagram/Diagram';
 import Header from '../components/UI/Header';
 import { Container } from '../components/Container';
 import SpeechRecognition, {
@@ -9,13 +9,21 @@ import SpeechRecognition, {
 } from 'react-speech-recognition';
 import PageTitle from '../components/PageTitle';
 
-interface Props {}
+interface Props {
+  useAuthInput: [boolean, (token: string | undefined) => void];
+}
 
-export default function MeetingRoom(props: Props) {
+export default function MeetingRoom({ useAuthInput }: Props) {
   const [transcriptArr, setTranscriptArr] = useState<string[]>([]);
   const [recording, setRecording] = useState(false);
   const { transcript, resetTranscript } = useSpeechRecognition();
-  const [screenFlag, setscreenFlag] = useState(false)
+  const [screenFlag, setscreenFlag] = useState(false);
+
+  useEffect(() => {
+    if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
+      alert("Browser doesn't support speech recognition.");
+    }
+  }, []);
 
   // const canvasRef = useRef<LegacyRef<ReactDiagram>>(null);
   useEffect(() => {
@@ -38,20 +46,16 @@ export default function MeetingRoom(props: Props) {
     }
   }, [recording]);
 
-  if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
-    alert("Browser doesn't support speech recognition.");
-  }
-
   const screenFun = () => {
-    setscreenFlag(!screenFlag);
-  }
+    setscreenFlag(true);
+  };
 
   return (
     <Container>
       <PageTitle title={'Room'} />
-      <Header label={'Meeting room'} />
+      <Header useAuthInput={useAuthInput} />
 
-      <Diagram transcriptArr={transcriptArr} screenFlag={screenFlag}/>
+      <Diagram transcriptArr={transcriptArr} screenFlag={screenFlag} />
 
       <Button type="mic" onClick={toggleListening}>
         {' '}
@@ -63,8 +67,8 @@ export default function MeetingRoom(props: Props) {
         Reset
       </Button>
       <Button type="screenshot" onClick={screenFun}>
-          {' '}
-          Take screenshot
+        {' '}
+        Take screenshot
       </Button>
     </Container>
   );

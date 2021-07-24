@@ -27,11 +27,12 @@ function initDiagram() {
   });
 
   // define a simple Node template
-  diagram.nodeTemplate = 
-  $(
-    go.Node, 'Auto',
+  diagram.nodeTemplate = $(
+    go.Node,
+    'Auto',
     {
-      resizable: true, resizeObjectName: "Shape"
+      resizable: true,
+      resizeObjectName: 'Shape',
     },
     new go.Binding('location', 'loc', go.Point.parse),
     $(
@@ -39,7 +40,7 @@ function initDiagram() {
       'Circle',
       {
         fill: color,
-        name: "Shape",
+        name: 'Shape',
         portId: '',
         cursor: 'pointer',
         fromLinkable: true,
@@ -51,44 +52,59 @@ function initDiagram() {
     ),
     $(
       go.TextBlock,
-      { editable: true, stroke: 'black', margin: 8, font: "bold 16px sans-serif" },
+      {
+        editable: true,
+        stroke: 'black',
+        margin: 8,
+        font: 'bold 16px sans-serif',
+      },
       new go.Binding('text', 'key'),
     ),
   );
 
-  diagram.linkTemplate = 
-      $(go.Link, { relinkableFrom: true, relinkableTo: true},
-        $(go.Shape),
-        $(go.Shape, { toArrow: "Standard"})
-      );
+  diagram.linkTemplate = $(
+    go.Link,
+    { relinkableFrom: true, relinkableTo: true },
+    $(go.Shape),
+    $(go.Shape, { toArrow: 'Standard' }),
+  );
 
-  diagram.toolManager.relinkingTool.fromHandleArchetype =
-    $(go.Shape, "Diamond", { desiredSize: new go.Size(9, 9), stroke: "green", fill: "lime", segmentIndex: 0});
-  
-  diagram.toolManager.relinkingTool.toHandleArchetype =
-    $(go.Shape, "Diamond", { desiredSize: new go.Size(9, 9), stroke: "red", fill: "pink", segmentIndex: -1});
-      
+  diagram.toolManager.relinkingTool.fromHandleArchetype = $(
+    go.Shape,
+    'Diamond',
+    {
+      desiredSize: new go.Size(9, 9),
+      stroke: 'green',
+      fill: 'lime',
+      segmentIndex: 0,
+    },
+  );
+
+  diagram.toolManager.relinkingTool.toHandleArchetype = $(go.Shape, 'Diamond', {
+    desiredSize: new go.Size(9, 9),
+    stroke: 'red',
+    fill: 'pink',
+    segmentIndex: -1,
+  });
 
   return diagram;
 }
 
 let name = 1;
-let initFlag = false;
 
-const Diagram = React.forwardRef(({ transcriptArr,screenFlag}: Props) => {
-  
+const Diagram = React.forwardRef(({ transcriptArr, screenFlag }: Props) => {
   const canvasRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    console.log('canvasRef:', canvasRef.current)
-    if (initFlag) {
-      if(!canvasRef.current) return;
+    console.log('canvasRef:', canvasRef.current);
+    if (screenFlag) {
+      if (!canvasRef.current) return;
       html2canvas(canvasRef.current, {}).then((canvas) => {
         saveAs(canvas.toDataURL(), `pciture${name}.png`);
-      })
+      });
       name++;
     }
-    initFlag = true;
-  }, [screenFlag])
+  }, [screenFlag]);
 
   function saveAs(uri: string, filename: string) {
     var link = document.createElement('a');
@@ -102,14 +118,14 @@ const Diagram = React.forwardRef(({ transcriptArr,screenFlag}: Props) => {
       window.open(uri);
     }
   }
-  
+
   const wordClickHandler = (word: string) => {
     console.log('word clicked');
     const x = Math.random() * 900,
       y = Math.random() * 300;
     const color = random_rgba();
     model.addNodeData({ key: word, fill: color, loc: `${x} ${y}` });
-    diagram.model = model; 
+    diagram.model = model;
   };
 
   return (
@@ -134,7 +150,7 @@ const Diagram = React.forwardRef(({ transcriptArr,screenFlag}: Props) => {
       </TranscriptBox>
     </Container>
   );
-})
+});
 
 const Container = styled.section`
   width: 100%;
@@ -143,6 +159,8 @@ const Container = styled.section`
 const TranscriptBox = styled.div`
   height: 50px;
   width: 50%;
+  background-color: #fff;
+  color: black;
   margin-top: 10px;
   padding: 10px;
   border: 1px solid gray;

@@ -5,13 +5,15 @@ import Header from '../components/UI/Header';
 import { Container } from '../components/Container';
 import PageTitle from '../components/PageTitle';
 
-interface Props {}
+interface Props {
+  useAuthInput: [boolean, (token: string | undefined) => void];
+}
 
-export default function Home(props: Props) {
+export default function Home({ useAuthInput }: Props) {
   return (
     <Container>
       <PageTitle title={'Home'} />
-      <Header label={'Home 입니다.'} />
+      <Header useAuthInput={useAuthInput} />
     </Container>
   );
 }
