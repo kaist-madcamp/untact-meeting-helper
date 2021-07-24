@@ -3,6 +3,7 @@ import Notifications from '../components/webcam/Notifications';
 import Options from '../components/webcam/Options';
 import VideoPlayer from '../components/webcam/VideoPlayer';
 import Header from '../components/UI/Header';
+import { Container } from '../components/Container';
 
 interface Props {
   useAuthInput: [boolean, (token: string | undefined) => void];
@@ -11,16 +12,14 @@ interface Props {
 
 export default function WebCam({ useAuthInput }: Props) {
   return (
-    <div>
+    <Container>
       <Header useAuthInput={useAuthInput} />
-
-      <Indicator>대기 상태입니다.</Indicator>
       <VideoPlayer />
 
       {/* <Options>
         <Notifications />
       </Options> */}
-    </div>
+    </Container>
   );
 }
 

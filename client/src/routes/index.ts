@@ -1,5 +1,6 @@
 export const routes = {
-  home: '/',
+  root: '/',
+  home: '/home',
   signUp: '/signUp',
   meetingRoom: '/meeting-room',
   webcam: '/webcam',

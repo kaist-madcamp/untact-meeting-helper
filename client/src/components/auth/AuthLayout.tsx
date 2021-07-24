@@ -19,10 +19,8 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: ${(props) => props.theme.bgColor};
 `;
 
 const Wrapper = styled.div`
-  max-width: 350px;
   width: 100%;
 `;

@@ -28,9 +28,10 @@ interface LocationState {
 
 interface Props {
   useAuthInput: [boolean, (token: string | undefined) => void];
+  toggleAuthTypeHandler: () => void;
 }
 
-export default function Login({ useAuthInput }: Props) {
+export default function Login({ useAuthInput, toggleAuthTypeHandler }: Props) {
   const location = useLocation<LocationState>();
   const [reqErrorMessage, setReqErrorMessage] = useState<string>('');
   const { mutateAsync, isLoading } = useMutation(loginUserAPI);
@@ -68,7 +69,9 @@ export default function Login({ useAuthInput }: Props) {
   };
 
   return (
-    <AuthLayout>
+    <Container
+      onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
+    >
       <PageTitle title="Login" />
       <FormBox>
         <Title>Meeting helper</Title>
@@ -115,12 +118,13 @@ export default function Login({ useAuthInput }: Props) {
       <BottomBox
         title="가입하기"
         description="계정이 없으신가요?"
-        link={routes.signUp}
+        toggleAuthTypeHandler={toggleAuthTypeHandler}
       />
-    </AuthLayout>
+    </Container>
   );
 }
 
+const Container = styled.div``;
 const Notification = styled.div`
   color: #2ecc71;
 `;
