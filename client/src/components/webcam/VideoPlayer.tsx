@@ -50,42 +50,42 @@ const VideoPlayer = () => {
   return (
     <Draggable>
       <Grid container className={classes.gridContainer}>
-      {stream && (
-        //   Our own video
-        <Paper className={classes.paper}>
-          <Grid item xs={12} md={6}>
-            <Typography variant="h5" gutterBottom>
-              {name || 'Name'}
-              <button onClick={sizeUp}>+</button>
-              <button onClick={sizeDown}>-</button>
-            </Typography>
-            <video
-              playsInline
-              muted
-              ref={myVideo}
-              autoPlay
-              className={classes.video}
-            />
-          </Grid>
-        </Paper>
-      )}
-      {callAccepted && !callEnded && (
-        // users video
-        <Paper className={classes.paper}>
-          <Grid item xs={12} md={6}>
-            <Typography variant="h5" gutterBottom>
-              {call?.name || 'Name'}
-            </Typography>
-            <video
-              playsInline
-              ref={userVideo}
-              autoPlay
-              className={classes.video}
-            />
-          </Grid>
-        </Paper>
-      )}
-    </Grid>
+        {stream && (
+          //   Our own video
+          <Paper className={classes.paper}>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h5" gutterBottom>
+                {name || 'Name'}
+                <button onClick={sizeUp}>+</button>
+                <button onClick={sizeDown}>-</button>
+              </Typography>
+              <video
+                playsInline
+                muted
+                ref={myVideo}
+                autoPlay
+                className={classes.video}
+              />
+            </Grid>
+          </Paper>
+        )}
+        {callAccepted && !callEnded && (
+          // users video
+          <Paper className={classes.paper}>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h5" gutterBottom>
+                {call?.name || 'Name'}
+              </Typography>
+              <video
+                playsInline
+                ref={userVideo}
+                autoPlay
+                className={classes.video}
+              />
+            </Grid>
+          </Paper>
+        )}
+      </Grid>
     </Draggable>
   );
 };
