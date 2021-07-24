@@ -12,8 +12,6 @@ import WebCam from './WebCam';
 import VideoPlayer from '../components/webcam/VideoPlayer';
 import Options from '../components/webcam/Options';
 import Notifications from '../components/webcam/Notifications';
-import Draggable from 'react-draggable';
-import {Row, Col} from 'antd';
 
 interface Props {
   useAuthInput: [boolean, (token: string | undefined) => void];
@@ -58,34 +56,34 @@ export default function MeetingRoom({ useAuthInput }: Props) {
 
   return (
     <>
-      <PageTitle title={'Room'} />
-      <Header useAuthInput={useAuthInput} />
-      <Row>
-        <Col>
-          <Diagram transcriptArr={transcriptArr} screenFlag={screenFlag} />
-          <Button type="mic" onClick={toggleListening}>
-            {' '}
-            회의 시작
-            <RecordingIndicator recording={recording} />
-          </Button>
-          <Button type="remove" onClick={resetTranscript}>
-            {' '}
-            Reset
-          </Button>
-          <Button type="screenshot" onClick={screenFun}>
-            {' '}
-            Take screenshot
-          </Button>
-        </Col>
-        <Col>
-          <Draggable>
-            <VideoPlayer />
-            <Options>
-              <Notifications />
-            </Options>
-          </Draggable>
-        </Col>
-      </Row>
+      <Container>
+        <PageTitle title={'Room'} />
+        <Header useAuthInput={useAuthInput} />
+
+        <Diagram transcriptArr={transcriptArr} screenFlag={screenFlag} />
+
+        <Button type="mic" onClick={toggleListening}>
+          {' '}
+          회의 시작
+          <RecordingIndicator recording={recording} />
+        </Button>
+        <Button type="remove" onClick={resetTranscript}>
+          {' '}
+          Reset
+        </Button>
+        <Button type="screenshot" onClick={screenFun}>
+          {' '}
+          Take screenshot
+        </Button>
+      </Container>
+
+      <Container>
+        <VideoPlayer />
+
+        <Options>
+          <Notifications />
+        </Options>
+      </Container>
     </>
   );
 }
