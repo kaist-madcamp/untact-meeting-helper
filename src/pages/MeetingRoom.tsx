@@ -43,7 +43,7 @@ export default function MeetingRoom(props: Props) {
   }
 
   const screenFun = () => {
-    setscreenFlag(true);
+    setscreenFlag(!screenFlag);
   }
 
   return (
