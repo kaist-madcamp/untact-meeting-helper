@@ -54,29 +54,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// export default function WebCam(props: Props) {
-//   const classes = useStyles();
-
-//   return (
-//     <div className={classes.wrapper}>
-//       <Header label={''} />
-//       {/* <Header label={'room'} /> */}
-//       {/* <AppBar className={classes.appBar} position="static" color="inherit">
-//         <Typography variant="h4" align="center" color="primary">
-//           {' '}
-//           Meeting Assistant
-//         </Typography>
-//       </AppBar> */}
-//       <div className = {classes.rightallign}>
-//         <VideoPlayer />
-//         <Options>
-//           <Notifications />
-//         </Options>
-//       </div>
-//     </div>
-//     // <div></div>
-//   );
-// }
 interface Props {}
 
 export default function MeetingRoom(props: Props) {
@@ -117,18 +94,13 @@ export default function MeetingRoom(props: Props) {
 
   return (
 
-    <Container>
+    <div>
       <PageTitle title={'Room'} />
       <Header label={'Meeting room'} />
 
-      <Grid container className={classes.gridContainer}>
-        
-        <Container>
+      <div className={classes.gridContainer}>
+        <div>
           <Diagram transcriptArr={transcriptArr} screenFlag={screenFlag}/>
-
-          {/* <VideoPlayer/>
-          <Notifications/> */}
-          
           <Button type="mic" onClick={toggleListening}>
             {' '}
             회의 시작
@@ -142,9 +114,9 @@ export default function MeetingRoom(props: Props) {
               {' '}
               Take screenshot
           </Button>
-        </Container>
+        </div>
 
-        <Container>
+        <div>
             <div className={classes.wrapper}>
               <div className = {classes.rightallign}>
                 <VideoPlayer />
@@ -153,10 +125,9 @@ export default function MeetingRoom(props: Props) {
                 </Options>
               </div>
             </div>
-        </Container>
-        
-      </Grid>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 }
 
