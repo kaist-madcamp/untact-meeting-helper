@@ -1,14 +1,17 @@
 const express = require('express');
 const http = require('http');
 const bodyParser = require('body-parser');
+const socketIO = require('socket.io');
 const mongoose = require('mongoose');
 const userRouter = require('./src/routes/user');
 const postRouter = require('./src/routes/post')
 const dbURL = 'mongodb://localhost:27017/meeting_helper'
 const cors = require('cors')
+const router = require('./router');
 // 익스프레스 객체 생성
 var app = express();
 
+const { addUser, removeUser, getUser, getUsersInRoom } = require('./users');
 //mongodb 연결 및 설정
 mongoose.connect(dbURL, {
   useNewUrlParser: true,
@@ -16,6 +19,9 @@ mongoose.connect(dbURL, {
   useCreateIndex: true,
   useFindAndModify: false
 });
+
+// port
+const port = 80;
 
 mongoose.set('useFindAndModify', false);
 
@@ -39,8 +45,14 @@ app.get('/', (req, res) => {
     res.status(418).send("Meeting Start");
 });
 
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true, 
+};
+
 //router 연결
-app.use(cors())
+app.use(cors(corsOptions))
+app.use(router);
 app.use('/user', userRouter);
 app.use('/post', postRouter);
 // Express 서버 시작
@@ -50,6 +62,45 @@ app.use('/post', postRouter);
 
 const server = http.createServer(app);
 
-server.listen(80, ()=>{
-    console.log("Listening on port 80...")
-})
+const io = socketIO(server, {
+  cors: {
+     origin: '*'
+  }
+});
+
+// socketio 문법
+io.on('connect', (socket) => {
+  socket.on('join', ({ name, room }, callback) => {
+    const { error, user } = addUser({ id: socket.id, name, room });
+
+    if(error) return callback(error);
+
+    socket.join(user.room);
+
+    socket.emit('message', { user: 'admin', text: `${user.name}, welcome to room ${user.room}.`});
+    socket.broadcast.to(user.room).emit('message', { user: 'admin', text: `${user.name} has joined!` });
+
+    io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
+
+    callback();
+  });
+
+  socket.on('sendMessage', (message, callback) => {
+    const user = getUser(socket.id);
+
+    io.to(user.room).emit('message', { user: user.name, text: message });
+
+    callback();
+  });
+
+  socket.on('disconnect', () => {
+    const user = removeUser(socket.id);
+
+    if(user) {
+      io.to(user.room).emit('message', { user: 'Admin', text: `${user.name} has left.` });
+      io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room)});
+    }
+  })
+});
+
+server.listen(port, () => console.log(`Listening on port ${port}`))

@@ -8,7 +8,10 @@ import useAuth from './hooks/useAuth';
 import { GlobalStyles } from './styles/styles';
 import { PortalProvider } from './providers/PortalProvider';
 import WaitingRoom from './pages/WaitingRoom';
-import Upload from './pages/Upload';
+import DiagramSync from './pages/DiagramSync';
+
+import Chat from './pages/Chat';
+import Join from './pages/Join';
 
 function App() {
   const [isLoggedIn, toggleAuth] = useAuth();
@@ -30,9 +33,12 @@ function App() {
             <MeetingRoom useAuthInput={[isLoggedIn, toggleAuth]} />
           </Route>
 
-          <Route path={routes.upload}>
-            <Upload/>
+          <Route path={routes.diagramSync}>
+            <DiagramSync/>
           </Route>
+
+          <Route path="/join" exact component={Join} />
+          <Route path="/chat" component={Chat} />
         </Switch>
       </HelmetProvider>
     </PortalProvider>
