@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import Home from './pages/Home';
 import MeetingRoom from './pages/MeetingRoom';
 import { routes } from './routes/index';
@@ -20,6 +20,8 @@ function App() {
           <Route path={routes.root} exact>
             <WaitingRoom useAuthInput={[isLoggedIn, toggleAuth]} />
           </Route>
+
+          {!isLoggedIn && <Redirect to={routes.root}></Redirect>}
 
           <Route path={routes.home} exact>
             <Home useAuthInput={[isLoggedIn, toggleAuth]} />

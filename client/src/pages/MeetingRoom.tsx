@@ -11,6 +11,7 @@ import VideoPlayer from '../components/webcam/VideoPlayer';
 import Options from '../components/webcam/Options';
 import Notifications from '../components/webcam/Notifications';
 import PageLayout from '../components/PageLayout';
+import Draggable from 'react-draggable';
 
 interface Props {
   useAuthInput: [boolean, (userId: string | undefined) => void];
@@ -19,8 +20,10 @@ interface Props {
 export default function MeetingRoom({ useAuthInput }: Props) {
   const [transcriptArr, setTranscriptArr] = useState<string[]>([]);
   const [recording, setRecording] = useState(false);
-  const { transcript, resetTranscript } = useSpeechRecognition();
   const [screenFlag, setscreenFlag] = useState(false);
+  const [faceContainerWidth, setFaceContainerWidth] = useState('default');
+
+  const { transcript, resetTranscript } = useSpeechRecognition();
 
   useEffect(() => {
     if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
@@ -51,39 +54,93 @@ export default function MeetingRoom({ useAuthInput }: Props) {
     setscreenFlag(true);
   };
 
+  const sizeUp = () => {
+    if (faceContainerWidth === 'default') {
+      setFaceContainerWidth('up');
+    } else {
+      setFaceContainerWidth('default');
+    }
+  };
+
+  const sizeDown = () => {
+    if (faceContainerWidth === 'default') {
+      setFaceContainerWidth('down');
+    } else {
+      setFaceContainerWidth('default');
+    }
+  };
+
   return (
     <PageLayout title="Room" useAuthInput={useAuthInput}>
-      <DiagramContainer>
-        <Diagram transcriptArr={transcriptArr} screenFlag={screenFlag} />
+      <Container>
+        <DiagramContainer>
+          <Diagram transcriptArr={transcriptArr} screenFlag={screenFlag} />
 
-        <Button type="mic" onClick={toggleListening}>
-          {' '}
-          회의 시작
-          <RecordingIndicator recording={recording} />
-        </Button>
-        <Button type="remove" onClick={resetTranscript}>
-          {' '}
-          Reset
-        </Button>
-        <Button type="screenshot" onClick={screenFun}>
-          {' '}
-          Take screenshot
-        </Button>
-      </DiagramContainer>
+          <ControlBox>
+            <Button type="mic" onClick={toggleListening}>
+              {' '}
+              STT Start
+              <RecordingIndicator recording={recording} />
+            </Button>
+            <Button type="remove" onClick={resetTranscript}>
+              {' '}
+              Reset
+            </Button>
+            <Button type="screenshot" onClick={screenFun}>
+              {' '}
+              Take screenshot
+            </Button>
+          </ControlBox>
+        </DiagramContainer>
 
-      <FaceContainer>
-        <VideoPlayer />
-        <Options>
-          <Notifications />
-        </Options>
-      </FaceContainer>
+        <Draggable>
+          <FaceContainer faceContainerWidth={faceContainerWidth}>
+            <VideoPlayer
+              widthController={[faceContainerWidth, sizeUp, sizeDown]}
+            />
+            {faceContainerWidth !== 'down' ? (
+              <Options>
+                <Notifications />
+              </Options>
+            ) : null}
+          </FaceContainer>
+        </Draggable>
+      </Container>
     </PageLayout>
   );
 }
 
-const DiagramContainer = styled.div``;
+const Container = styled.div`
+  display: flex;
+  padding: 20px;
+`;
 
-const FaceContainer = styled.div``;
+const DiagramContainer = styled.div`
+  width: 100%;
+`;
+
+const ControlBox = styled.div``;
+
+export const FaceContainer = styled.div<{ faceContainerWidth: string }>`
+  position: absolute;
+  right: 30px;
+  z-index: 999;
+  width: ${(props) => {
+    if (window.location.pathname === '/') {
+      return props.faceContainerWidth === 'default'
+        ? '500px'
+        : props.faceContainerWidth === 'up'
+        ? '800px'
+        : '300px';
+    } else if (window.location.pathname === '/meeting-room') {
+      return props.faceContainerWidth === 'default'
+        ? '300px'
+        : props.faceContainerWidth === 'up'
+        ? '400px'
+        : '0px';
+    }
+  }};
+`;
 
 const RecordingIndicator = styled.span<{ recording: boolean }>`
   display: inline-block;

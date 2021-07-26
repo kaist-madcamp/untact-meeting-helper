@@ -130,13 +130,14 @@ const Diagram = React.forwardRef(({ transcriptArr, screenFlag }: Props) => {
 
   return (
     <Container>
-      <div ref={canvasRef}>
+      <div ref={canvasRef} style={{ position: 'relative' }}>
         <ReactDiagram
           initDiagram={initDiagram}
           divClassName="diagram-component"
           nodeDataArray={[]}
           skipsDiagramUpdate={true}
         />
+        <CaptureBtn>capture</CaptureBtn>
       </div>
 
       <TranscriptBox>
@@ -152,11 +153,20 @@ const Diagram = React.forwardRef(({ transcriptArr, screenFlag }: Props) => {
   );
 });
 
-const Container = styled.section``;
+const Container = styled.section`
+  max-width: calc(100vw - 400px);
+  min-width: 300px;
+  width: 100%;
+`;
+
+const CaptureBtn = styled.button`
+  position: absolute;
+  right: 10px;
+  top: 10px;
+`;
 
 const TranscriptBox = styled.div`
   height: 150px;
-  width: 50%;
   background-color: #fff;
   color: black;
   margin-top: 10px;

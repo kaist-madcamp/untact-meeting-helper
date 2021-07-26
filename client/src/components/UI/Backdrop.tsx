@@ -37,5 +37,5 @@ const BackdropContainer = styled.div<{ close: boolean }>`
   background-color: rgba(249, 249, 249, 0.95);
   opacity: ${(props) => (props.close ? 0 : 1)};
   transition: ${(props) => !props.close && 'opacity 0.3s'};
-  z-index: ${(props) => (props.close ? -10 : 10)};
+  z-index: ${(props) => (props.close ? -999 : 999)};
 `;

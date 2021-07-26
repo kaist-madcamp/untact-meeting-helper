@@ -1,13 +1,14 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { SocketContext } from '../../providers/SocketProvider';
-import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 
-const VideoPlayer = () => {
-  const [videoWidthRatio, setVideoWidthRatio] = useState('default');
+interface Props {
+  widthController: [string, () => void, () => void];
+}
 
+const VideoPlayer = ({ widthController }: Props) => {
   const {
     name,
     callAccepted,
@@ -18,38 +19,24 @@ const VideoPlayer = () => {
     call,
   } = useContext(SocketContext);
 
-  const sizeUp = () => {
-    if (videoWidthRatio === 'default') {
-      setVideoWidthRatio('up');
-    } else {
-      setVideoWidthRatio('default');
-    }
-  };
-
-  const sizeDown = () => {
-    if (videoWidthRatio === 'default') {
-      setVideoWidthRatio('down');
-    } else {
-      setVideoWidthRatio('default');
-    }
-  };
-
   return (
     <Container>
       {stream && (
         //   Our own video
         <VideoContainer>
           <VideoTitle>
-            {name || 'Waiting room'}
-            <SButton className="plus" onClick={sizeUp}>
+            {name || window.location.pathname === '/'
+              ? 'Waiting room'
+              : 'Invite friends!'}
+            <SButton className="plus" onClick={widthController[1]}>
               <FontAwesomeIcon icon={faPlus} />
             </SButton>
-            <SButton className="minus" onClick={sizeDown}>
+            <SButton className="minus" onClick={widthController[2]}>
               <FontAwesomeIcon icon={faMinus} />
             </SButton>
           </VideoTitle>
           <SVideo
-            videoWidthRatio={videoWidthRatio}
+            videoWidthRatio={widthController[0]}
             playsInline
             muted
             ref={myVideo}
@@ -62,7 +49,7 @@ const VideoPlayer = () => {
         <VideoContainer>
           <VideoTitle>{call?.name || 'Name'}</VideoTitle>
           <SVideo
-            videoWidthRatio={videoWidthRatio}
+            videoWidthRatio={widthController[0]}
             playsInline
             ref={userVideo}
             autoPlay
@@ -85,21 +72,30 @@ const VideoTitle = styled.div`
   text-align: center;
   font-size: 24px;
   font-weight: 500;
+  white-space: pre;
 `;
 
 const VideoContainer = styled.div`
   padding: 0px;
   border: 2px solid black;
-  margin: 5px;
 `;
 
 const SVideo = styled.video<{ videoWidthRatio: string }>`
-  width: ${(props) =>
-    props.videoWidthRatio === 'default'
-      ? '500px'
-      : props.videoWidthRatio === 'up'
-      ? '800px'
-      : '300px'};
+  width: ${(props) => {
+    if (window.location.pathname === '/') {
+      return props.videoWidthRatio === 'default'
+        ? '500px'
+        : props.videoWidthRatio === 'up'
+        ? '800px'
+        : '300px';
+    } else if (window.location.pathname === '/meeting-room') {
+      return props.videoWidthRatio === 'default'
+        ? '300px'
+        : props.videoWidthRatio === 'up'
+        ? '400px'
+        : '0px';
+    }
+  }};
 `;
 
 const SButton = styled.button`

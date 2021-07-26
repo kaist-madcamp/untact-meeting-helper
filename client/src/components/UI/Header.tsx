@@ -31,17 +31,21 @@ export default function Header({ useAuthInput }: Props) {
   return (
     <SHeader>
       <Navigation>
+        <Link to={routes.root}>
+          <Title>Untact meeting helper</Title>
+        </Link>
         {useAuthInput[0] ? (
-          <>
+          <div>
             <Link to={routes.home}>
               <FontAwesomeIcon icon={faHouseUser} />
             </Link>
             <Link to={routes.meetingRoom}>
               <FontAwesomeIcon icon={faHandshake} />
             </Link>
-          </>
+            <SButton onClick={() => useAuthInput[1]()}>Log out</SButton>
+          </div>
         ) : (
-          <>
+          <div>
             <a>
               <FontAwesomeIcon
                 onClick={() => setShowLoginModal(true)}
@@ -54,9 +58,8 @@ export default function Header({ useAuthInput }: Props) {
                 icon={faHandshake}
               />
             </a>
-          </>
+          </div>
         )}
-        <button onClick={() => useAuthInput[1]()}>Log out</button>
 
         <Backdrop
           isClose={!showLoginModal}
@@ -76,18 +79,17 @@ export default function Header({ useAuthInput }: Props) {
   );
 }
 
-const SHeader = styled.div`
+const SHeader = styled.header`
   display: flex;
-  justify-content: flex-end;
   padding: 15px 0;
   border-bottom: 1px solid black;
 `;
 
 const Navigation = styled.nav`
+  width: 100%;
   display: flex;
-  flex: 0.5;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   svg {
     margin: 0 20px;
     color: black;
@@ -95,4 +97,21 @@ const Navigation = styled.nav`
   a {
     cursor: pointer;
   }
+`;
+
+const Title = styled.h1`
+  color: black;
+  &:hover {
+    text-decoration: underline;
+  }
+  cursor: pointer;
+`;
+
+const SButton = styled.button`
+  background-color: #3f51b5;
+  color: #fff;
+  padding: 5px;
+  border: 0;
+  height: 100%;
+  cursor: pointer;
 `;

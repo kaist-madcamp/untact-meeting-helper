@@ -16,3 +16,12 @@ interface LoginUserInput {
 interface LoginUserOutput extends CoreOutput {
   userId?: string;
 }
+
+interface MeetingLog {
+  title: string;
+  image: string;
+}
+
+interface FetchAllMeetingLogOutput extends CoreOutput {
+  meetingLogs: MeetingLog[]
+}

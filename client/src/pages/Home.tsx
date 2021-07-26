@@ -10,7 +10,11 @@ interface Props {
 export default function Home({ useAuthInput }: Props) {
   return (
     <PageLayout title="home" useAuthInput={useAuthInput}>
-      <h1>home page입니다.</h1>
+      <HomeContainer>home page입니다.</HomeContainer>
     </PageLayout>
   );
 }
+
+const HomeContainer = styled.div`
+  height: 100vh;
+`;
