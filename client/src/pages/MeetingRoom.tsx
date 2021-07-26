@@ -12,6 +12,12 @@ import Options from '../components/webcam/Options';
 import Notifications from '../components/webcam/Notifications';
 import PageLayout from '../components/PageLayout';
 import Draggable from 'react-draggable';
+import Modal from '../components/UI/Modal';
+import { ChatContainer, ChatMainBox } from '../components/chat/ChatContainer';
+import {
+  ChatControlBox,
+  ChatController,
+} from '../components/chat/ChatController';
 
 interface Props {
   useAuthInput: [boolean, (userId: string | undefined) => void];
@@ -20,7 +26,7 @@ interface Props {
 export default function MeetingRoom({ useAuthInput }: Props) {
   const [transcriptArr, setTranscriptArr] = useState<string[]>([]);
   const [recording, setRecording] = useState(false);
-  const [screenFlag, setscreenFlag] = useState(false);
+  const [showChatBox, setShowChatBox] = useState(false);
   const [faceContainerWidth, setFaceContainerWidth] = useState('default');
 
   const { transcript, resetTranscript } = useSpeechRecognition();
@@ -50,10 +56,6 @@ export default function MeetingRoom({ useAuthInput }: Props) {
     }
   }, [recording]);
 
-  const screenFun = () => {
-    setscreenFlag(true);
-  };
-
   const sizeUp = () => {
     if (faceContainerWidth === 'default') {
       setFaceContainerWidth('up');
@@ -70,11 +72,15 @@ export default function MeetingRoom({ useAuthInput }: Props) {
     }
   };
 
+  const chatClickHandler = () => {
+    setShowChatBox(!showChatBox);
+  };
+
   return (
     <PageLayout title="Room" useAuthInput={useAuthInput}>
       <Container>
         <DiagramContainer>
-          <Diagram transcriptArr={transcriptArr} screenFlag={screenFlag} />
+          <Diagram transcriptArr={transcriptArr} />
 
           <ControlBox>
             <Button type="mic" onClick={toggleListening}>
@@ -86,9 +92,9 @@ export default function MeetingRoom({ useAuthInput }: Props) {
               {' '}
               Reset
             </Button>
-            <Button type="screenshot" onClick={screenFun}>
+            <Button type="chat" onClick={chatClickHandler}>
               {' '}
-              Take screenshot
+              Chatting
             </Button>
           </ControlBox>
         </DiagramContainer>
@@ -105,6 +111,24 @@ export default function MeetingRoom({ useAuthInput }: Props) {
             ) : null}
           </FaceContainer>
         </Draggable>
+
+        {showChatBox && (
+          <Modal>
+            <Draggable>
+              <ChatContainer>
+                <ChatControlBox>
+                  <ChatController
+                    onClick={() => setShowChatBox(false)}
+                    className="close"
+                  >
+                    x
+                  </ChatController>
+                </ChatControlBox>
+                <ChatMainBox>채팅이 여기옵니다.</ChatMainBox>
+              </ChatContainer>
+            </Draggable>
+          </Modal>
+        )}
       </Container>
     </PageLayout>
   );
@@ -124,7 +148,7 @@ const ControlBox = styled.div``;
 export const FaceContainer = styled.div<{ faceContainerWidth: string }>`
   position: absolute;
   right: 30px;
-  z-index: 999;
+  z-index: 888;
   width: ${(props) => {
     if (window.location.pathname === '/') {
       return props.faceContainerWidth === 'default'

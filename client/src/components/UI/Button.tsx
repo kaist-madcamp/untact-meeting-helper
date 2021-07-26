@@ -35,4 +35,8 @@ const SButton = styled.button`
     background-color: salmon;
     color: #fff;
   }
+  &.chat {
+    background-color: #3f51b5;
+    color: #fff;
+  }
 `;
