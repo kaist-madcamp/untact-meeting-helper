@@ -8,7 +8,6 @@ import html2canvas from 'html2canvas';
 
 interface Props {
   transcriptArr: string[];
-  screenFlag: boolean;
 }
 
 let model: go.GraphLinksModel;
@@ -92,22 +91,12 @@ function initDiagram() {
 
 let name = 1;
 
-const Diagram = React.forwardRef(({ transcriptArr, screenFlag }: Props) => {
+const Diagram = React.forwardRef(({ transcriptArr }: Props) => {
   const canvasRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    console.log('canvasRef:', canvasRef.current);
-    if (screenFlag) {
-      if (!canvasRef.current) return;
-      html2canvas(canvasRef.current, {}).then((canvas) => {
-        saveAs(canvas.toDataURL(), `pciture${name}.png`);
-      });
-      name++;
-    }
-  }, [screenFlag]);
-
   function saveAs(uri: string, filename: string) {
-    var link = document.createElement('a');
+    const link = document.createElement('a');
+    console.log('link : ', link);
     if (typeof link.download === 'string') {
       link.href = uri;
       link.download = filename;
@@ -128,6 +117,14 @@ const Diagram = React.forwardRef(({ transcriptArr, screenFlag }: Props) => {
     diagram.model = model;
   };
 
+  const captureBtnHandler = () => {
+    if (!canvasRef.current) return;
+    html2canvas(canvasRef.current, {}).then((canvas) => {
+      saveAs(canvas.toDataURL(), `picture-${name}.png`);
+    });
+    name++;
+  };
+
   return (
     <Container>
       <div ref={canvasRef} style={{ position: 'relative' }}>
@@ -137,7 +134,7 @@ const Diagram = React.forwardRef(({ transcriptArr, screenFlag }: Props) => {
           nodeDataArray={[]}
           skipsDiagramUpdate={true}
         />
-        <CaptureBtn>capture</CaptureBtn>
+        <CaptureBtn onClick={captureBtnHandler}>capture</CaptureBtn>
       </div>
 
       <TranscriptBox>
@@ -163,6 +160,7 @@ const CaptureBtn = styled.button`
   position: absolute;
   right: 10px;
   top: 10px;
+  z-index: 10;
 `;
 
 const TranscriptBox = styled.div`
