@@ -8,7 +8,6 @@ import useAuth from './hooks/useAuth';
 import { GlobalStyles } from './styles/styles';
 import { PortalProvider } from './providers/PortalProvider';
 import WaitingRoom from './pages/WaitingRoom';
-import DiagramSync from './pages/DiagramSync';
 
 import UploadPage from './pages/UploadPage';
 import MyPost from './pages/MyPost';
@@ -34,10 +33,6 @@ function App() {
 
           <Route path={routes.meetingRoom}>
             <MeetingRoom useAuthInput={[isLoggedIn, toggleAuth]} />
-          </Route>
-
-          <Route path={routes.diagramSync}>
-            <DiagramSync/>
           </Route>
 
           <Route path="/upload" component={UploadPage} />
