@@ -5,7 +5,7 @@ export interface CoreOutput {
 
 interface CreateUserInput {
   email: string;
-  name: string;
+  username: string;
   password: string;
 }
 
@@ -14,7 +14,7 @@ interface LoginUserInput {
   password: string;
 }
 interface LoginUserOutput extends CoreOutput {
-  userId?: string;
+  token?: string;
 }
 
 interface MeetingLog {

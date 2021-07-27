@@ -15,7 +15,7 @@ import { useState } from 'react';
 
 interface SignUpFormField {
   email: string;
-  name: string;
+  username: string;
   password: string;
 }
 interface Props {
@@ -35,11 +35,11 @@ export default function SignUp({ toggleAuthTypeHandler }: Props) {
 
   const onSubmitValid = async (data: SignUpFormField) => {
     if (isLoading) return;
-    const { email, name, password } = data;
+    const { email, username, password } = data;
     try {
       const res = await mutateAsync({
         email,
-        name,
+        username,
         password,
       });
       console.log(res);
@@ -81,17 +81,17 @@ export default function SignUp({ toggleAuthTypeHandler }: Props) {
           />
           <FormError message={errors?.email?.message} />
           <Input
-            {...register('name', {
+            {...register('username', {
               required: {
                 value: true,
-                message: '성명은 필수입니다.',
+                message: '유저네임은 필수입니다.',
               },
             })}
             type="text"
             placeholder="성명"
-            hasError={Boolean(errors?.name)}
+            hasError={Boolean(errors?.username)}
           />
-          <FormError message={errors?.name?.message} />
+          <FormError message={errors?.username?.message} />
           <Input
             {...register('password', {
               required: {

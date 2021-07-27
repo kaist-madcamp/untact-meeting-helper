@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import PageTitle from '../components/PageTitle';
-import { routes } from '../routes/index';
 import { useLocation } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import { loginUserAPI } from '../lib/api/auth';
@@ -12,6 +11,7 @@ import Button from '../components/auth/Button';
 import FormError from '../components/auth/FormError';
 import BottomBox from '../components/auth/BottomBox';
 import { SFormError } from '../components/auth/FormError';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 interface LoginFormField {
   email: string;
@@ -25,12 +25,12 @@ interface LocationState {
   message: string;
 }
 
-interface Props {
+interface Props extends RouteComponentProps<any> {
   useAuthInput: [boolean, (userId: string | undefined) => void];
   toggleAuthTypeHandler: () => void;
 }
 
-export default function Login({ useAuthInput, toggleAuthTypeHandler }: Props) {
+function Login({ history, useAuthInput, toggleAuthTypeHandler }: Props) {
   const location = useLocation<LocationState>();
   const [reqErrorMessage, setReqErrorMessage] = useState<string>('');
   const { mutateAsync, isLoading } = useMutation(loginUserAPI);
@@ -55,9 +55,11 @@ export default function Login({ useAuthInput, toggleAuthTypeHandler }: Props) {
         email,
         password,
       });
+      console.log(res);
       if (res.data.ok) {
-        useAuthInput[1](res.data.userId);
-        window.location.href = '/home';
+        useAuthInput[1](res.data.token);
+        // localStorage.setItem('USER_NAME', )
+        history.push('/home');
       } else {
         setReqErrorMessage(res.data.error!);
       }
@@ -136,3 +138,5 @@ export const ErrorMessage = styled(SFormError)`
 export const Title = styled.h1`
   color: ${(props) => props.theme.color};
 `;
+
+export default withRouter(Login);
