@@ -24,64 +24,61 @@ const Options = ({ children }: Props) => {
 
   return (
     <Container>
-      <div>
-        <div>
-          <div>
-            <TextField
-              label="Type User Name"
-              value={name}
-              onChange={(e) => setName!(e.target.value!)}
-              fullWidth
-            />
+      <Row>
+        <TextField
+          label="Type User Name"
+          value={name}
+          onChange={(e) => setName!(e.target.value!)}
+          fullWidth
+        />
 
-            <CopyToClipboard text={me!}>
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                startIcon={<Assignment fontSize="large" />}
-              >
-                Copy room id
-              </Button>
-            </CopyToClipboard>
-          </div>
+        <CopyToClipboard text={me!}>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            startIcon={<Assignment fontSize="large" />}
+          >
+            Copy room id
+          </Button>
+        </CopyToClipboard>
+      </Row>
+      <Row>
+        <TextField
+          label="Room ID to call"
+          value={idToCall}
+          onChange={(e) => setIdToCall(e.target.value)}
+          fullWidth
+        />
 
-          <div>
-            <TextField
-              label="Room ID to call"
-              value={idToCall}
-              onChange={(e) => setIdToCall(e.target.value)}
-              fullWidth
-            />
-
-            {callAccepted && !callEnded ? (
-              <Button
-                variant="contained"
-                color="secondary"
-                startIcon={<PhoneDisabled fontSize="large" />}
-                fullWidth
-                onClick={leaveCall}
-              >
-                Hang Up
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<Phone fontSize="small" />}
-                fullWidth
-                onClick={() => callUser!(idToCall)}
-              >
-                Call
-              </Button>
-            )}
-          </div>
-        </div>
-        {children}
-      </div>
+        {callAccepted && !callEnded ? (
+          <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<PhoneDisabled fontSize="large" />}
+            fullWidth
+            onClick={leaveCall}
+          >
+            Leave a room
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<Phone fontSize="small" />}
+            fullWidth
+            onClick={() => callUser!(idToCall)}
+          >
+            Call
+          </Button>
+        )}
+      </Row>
+      {children}
     </Container>
   );
 };
+
+const Row = styled.div``;
 
 const Container = styled.div`
   width: 100%;

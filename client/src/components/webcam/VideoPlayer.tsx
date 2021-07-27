@@ -22,7 +22,7 @@ const VideoPlayer = ({ widthController }: Props) => {
   return (
     <Container>
       {stream && (
-        //   Our own video
+        //   내 캠
         <VideoContainer>
           <VideoTitle>
             {name || window.location.pathname === '/'
@@ -35,17 +35,19 @@ const VideoPlayer = ({ widthController }: Props) => {
               <FontAwesomeIcon icon={faMinus} />
             </SButton>
           </VideoTitle>
-          <SVideo
-            videoWidthRatio={widthController[0]}
-            playsInline
-            muted
-            ref={myVideo}
-            autoPlay
-          />
+          {widthController[0] !== 'down' && (
+            <SVideo
+              videoWidthRatio={widthController[0]}
+              playsInline
+              muted
+              ref={myVideo}
+              autoPlay
+            />
+          )}
         </VideoContainer>
       )}
       {callAccepted && !callEnded && (
-        // users video
+        // 친구 캠
         <VideoContainer>
           <VideoTitle>{call?.name || 'Name'}</VideoTitle>
           <SVideo
@@ -62,6 +64,7 @@ const VideoPlayer = ({ widthController }: Props) => {
 
 const Container = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   cursor: pointer;
 `;
@@ -78,6 +81,7 @@ const VideoTitle = styled.div`
 const VideoContainer = styled.div`
   padding: 0px;
   border: 2px solid black;
+  min-width: 300px;
 `;
 
 const SVideo = styled.video<{ videoWidthRatio: string }>`
@@ -93,7 +97,7 @@ const SVideo = styled.video<{ videoWidthRatio: string }>`
         ? '300px'
         : props.videoWidthRatio === 'up'
         ? '400px'
-        : '0px';
+        : '200px';
     }
   }};
 `;
