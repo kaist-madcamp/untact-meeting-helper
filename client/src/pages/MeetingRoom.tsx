@@ -13,15 +13,29 @@ import Notifications from '../components/webcam/Notifications';
 import PageLayout from '../components/PageLayout';
 import Draggable from 'react-draggable';
 import Modal from '../components/UI/Modal';
-import { ChatContainer, ChatMainBox } from '../components/chat/ChatContainer';
+import {
+  ChatContainer,
+  ChatMainBox,
+  ChatBox,
+  ChatBlock,
+} from '../components/chat/ChatContainer';
 import {
   ChatControlBox,
   ChatController,
 } from '../components/chat/ChatController';
+import io from 'socket.io-client';
+import { SERVER_ENDPOINT } from '../lib/constant';
+import {
+  ChatForm,
+  ChatFormButton,
+  ChatFormTextarea,
+} from '../components/chat/ChatForm';
 
 interface Props {
   useAuthInput: [boolean, (userId: string | undefined) => void];
 }
+
+let socket;
 
 export default function MeetingRoom({ useAuthInput }: Props) {
   const [transcriptArr, setTranscriptArr] = useState<string[]>([]);
@@ -29,12 +43,19 @@ export default function MeetingRoom({ useAuthInput }: Props) {
   const [showChatBox, setShowChatBox] = useState(false);
   const [faceContainerWidth, setFaceContainerWidth] = useState('default');
 
+  const [username, setUsername] = useState();
+  const [roomId, setRoomId] = useState();
+
+  const [keystroke, setKeystroke] = useState('');
+
   const { transcript, resetTranscript } = useSpeechRecognition();
 
   useEffect(() => {
     if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
       alert("Browser doesn't support speech recognition.");
     }
+
+    socket = io(SERVER_ENDPOINT);
   }, []);
 
   useEffect(() => {
@@ -76,6 +97,22 @@ export default function MeetingRoom({ useAuthInput }: Props) {
     setShowChatBox(!showChatBox);
   };
 
+  const sendMessageHandler = (e?: React.FormEvent<HTMLFormElement>) => {
+    e?.preventDefault();
+    console.log('submit!');
+    // socket emit
+
+    setKeystroke('');
+  };
+
+  const msgChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (e.target.value.includes('\n')) {
+      sendMessageHandler();
+      return;
+    }
+    setKeystroke(e.target.value);
+  };
+
   return (
     <PageLayout title="Room" useAuthInput={useAuthInput}>
       <Container>
@@ -84,16 +121,13 @@ export default function MeetingRoom({ useAuthInput }: Props) {
 
           <ControlBox>
             <Button type="mic" onClick={toggleListening}>
-              {' '}
               STT Start
               <RecordingIndicator recording={recording} />
             </Button>
             <Button type="remove" onClick={resetTranscript}>
-              {' '}
               Reset
             </Button>
             <Button type="chat" onClick={chatClickHandler}>
-              {' '}
               Chatting
             </Button>
           </ControlBox>
@@ -124,7 +158,33 @@ export default function MeetingRoom({ useAuthInput }: Props) {
                     x
                   </ChatController>
                 </ChatControlBox>
-                <ChatMainBox>채팅이 여기옵니다.</ChatMainBox>
+                <ChatMainBox>
+                  <ChatBlock location="left">
+                    <ChatBox className="receive_box">안녕</ChatBox>
+                  </ChatBlock>
+
+                  <ChatBlock location="left">
+                    <ChatBox className="receive_box">안녕</ChatBox>
+                  </ChatBlock>
+
+                  <ChatBlock location="right">
+                    <ChatBox className="send_box">반가워~</ChatBox>
+                  </ChatBlock>
+                </ChatMainBox>
+                <ChatForm
+                  method="post"
+                  name="SendMessageForm"
+                  onSubmit={sendMessageHandler}
+                >
+                  <ChatFormTextarea
+                    name="messageTextArea"
+                    onChange={msgChangeHandler}
+                    value={keystroke}
+                    maxLength={60}
+                    rows={5}
+                  />
+                  <ChatFormButton type="submit">전송</ChatFormButton>
+                </ChatForm>
               </ChatContainer>
             </Draggable>
           </Modal>
