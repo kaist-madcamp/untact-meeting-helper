@@ -5,5 +5,6 @@ export const routes = {
   meetingRoom: '/meeting-room',
   webcam: '/webcam',
   upload: '/upload',
+  myPost: '/myPost',
   diagramSync: '/diagramSync'
 };

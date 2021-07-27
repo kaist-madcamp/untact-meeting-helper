@@ -19,6 +19,11 @@ const Chat = ({ location }) => {
   const [users, setUsers] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const [Diagram, setDiagram] = useState([]);
+//   const [word, setword] = useState('');
+//   const [posX, setposX] = useState('');
+//   const [posY, setposY] = useState('');
+//   const [color, setcolor] = useState();
 
   useEffect(() => {
     const { name, room } = queryString.parse(location.search);
@@ -37,19 +42,32 @@ const Chat = ({ location }) => {
   
   useEffect(() => {
     socket.on('message', message => {
+        console.log("onMessage", message)
       setMessages(messages => [ ...messages, message ]);
+      console.log("Messages", messages)
     });
     
     socket.on("roomData", ({ users }) => {
       setUsers(users);
     });
-}, []);
+
+    socket.on('diagram', diagram => {
+        console.log("Diagram", diagram)
+      setDiagram(diagram);
+    });
+  }, []);
 
   const sendMessage = (event) => {
     event.preventDefault();
-
+    const diagram = {
+      word: "js",
+      posX: "100",
+      posY: "100",
+      color: "red"
+    }
     if(message) {
       socket.emit('sendMessage', message, () => setMessage(''));
+      socket.emit('sendDiagram', diagram, () => setMessage(''));
     }
   }
 

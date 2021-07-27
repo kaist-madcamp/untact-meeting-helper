@@ -10,6 +10,9 @@ import { PortalProvider } from './providers/PortalProvider';
 import WaitingRoom from './pages/WaitingRoom';
 import DiagramSync from './pages/DiagramSync';
 
+import UploadPage from './pages/UploadPage';
+import MyPost from './pages/MyPost';
+
 import Chat from './pages/Chat';
 import Join from './pages/Join';
 
@@ -36,6 +39,9 @@ function App() {
           <Route path={routes.diagramSync}>
             <DiagramSync/>
           </Route>
+
+          <Route path="/upload" component={UploadPage} />
+          <Route path="/myPost" component={MyPost} />
 
           <Route path="/join" exact component={Join} />
           <Route path="/chat" component={Chat} />

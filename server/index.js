@@ -7,7 +7,6 @@ const userRouter = require('./src/routes/user');
 const postRouter = require('./src/routes/post')
 const dbURL = 'mongodb://localhost:27017/meeting_helper'
 const cors = require('cors')
-const router = require('./router');
 // 익스프레스 객체 생성
 var app = express();
 
@@ -39,7 +38,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 // 기본 포트를 app 객체에 속성으로 설정
-app.set('port', process.env.PORT || 80);
+app.set('port', 80);
 
 app.get('/', (req, res) => {
     res.status(418).send("Meeting Start");
@@ -50,16 +49,13 @@ const corsOptions = {
   credentials: true, 
 };
 
+
 //router 연결
-app.use(cors(corsOptions))
-app.use(router);
+app.use(cors(corsOptions));
+// app.use(cors());
 app.use('/user', userRouter);
 app.use('/post', postRouter);
-// Express 서버 시작
-// http.createServer(app).listen(app.get('port'), function(){
-//     console.log(app.get('port') + "에서 express 실행 중");
-// });
-
+app.use('/uploads', express.static('uploads'));
 const server = http.createServer(app);
 
 const io = socketIO(server, {
@@ -81,9 +77,10 @@ io.on('connect', (socket) => {
     socket.broadcast.to(user.room).emit('message', { user: 'admin', text: `${user.name} has joined!` });
 
     io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
-
+    socket.emit('diagram', { user: 'admin', word: 'word', posX: 'posX', posY: 'posY', color: 'color'});
     callback();
   });
+
 
   socket.on('sendMessage', (message, callback) => {
     const user = getUser(socket.id);
@@ -93,6 +90,13 @@ io.on('connect', (socket) => {
     callback();
   });
 
+  socket.on('sendDiagram', (diagram, callback) => {
+    const user = getUser(socket.id);
+    socket.emit('diagram', diagram)
+    io.to(user.room).emit('diagram', diagram)
+  });
+
+  
   socket.on('disconnect', () => {
     const user = removeUser(socket.id);
 

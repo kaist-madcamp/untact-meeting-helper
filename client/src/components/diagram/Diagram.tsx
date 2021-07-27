@@ -1,10 +1,20 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as go from 'gojs';
 import styled from 'styled-components';
 import { ReactDiagram } from 'gojs-react';
 import { random_rgba } from './utils';
 import './Diagram.css';
 import html2canvas from 'html2canvas';
+
+// import queryString from 'query-string';
+import io from "socket.io-client";
+
+interface TransDiagramType {
+  word: string;
+  posX: string;
+  posY: string;
+  color: string;
+}
 
 interface Props {
   transcriptArr: string[];
@@ -13,6 +23,9 @@ interface Props {
 
 let model: go.GraphLinksModel;
 let diagram: go.Diagram;
+
+const ENDPOINT = 'http://192.249.18.120:80/';
+let socket:any;
 
 function initDiagram() {
   const $ = go.GraphObject.make;
@@ -90,23 +103,48 @@ function initDiagram() {
   return diagram;
 }
 
-let name = 1;
+let imgNum = 1;
 let initFlag = false;
 
 const Diagram = React.forwardRef(({ transcriptArr, screenFlag }: Props) => {
   const canvasRef = useRef<HTMLDivElement>(null);
+
+  const [name, setName] = useState('js');
+  const [room, setRoom] = useState('1');
+  const [users, setUsers] = useState('');
+  // const [message, setMessage] = useState('');
+  // const [messages, setMessages] = useState([]);
+  // const [Diagram, setDiagram] = useState<string[]>([]);
 
   useEffect(() => {
     console.log('canvasRef:', canvasRef.current);
     if (initFlag) {
       if (!canvasRef.current) return;
       html2canvas(canvasRef.current, {}).then((canvas) => {
-        saveAs(canvas.toDataURL(), `pciture${name}.png`);
+        saveAs(canvas.toDataURL(), `pciture${imgNum}.png`);
       });
-      name++;
+      imgNum++;
     }
     initFlag = true;
   }, [screenFlag]);
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit('join', { name, room }, (error: any) => {
+      if(error) {
+        alert(error);
+      }
+    });
+
+    socket.on("roomData", ({ users }: { users: string }) => {
+      setUsers(users);
+    });
+
+    socket.on('diagram', (dia: TransDiagramType) => {
+      model.addNodeData({ key: dia.word, fill: dia.color, loc: `${dia.posX} ${dia.posY}` });
+      diagram.model = model;
+    });
+  }, []);
 
   function saveAs(uri: string, filename: string) {
     var link = document.createElement('a');
@@ -126,7 +164,14 @@ const Diagram = React.forwardRef(({ transcriptArr, screenFlag }: Props) => {
     const x = Math.random() * 900,
       y = Math.random() * 300;
     const color = random_rgba();
+    let transdiagram: TransDiagramType = {
+      word: word,
+      posX: String(x),
+      posY: String(y),
+      color: color
+    };
     model.addNodeData({ key: word, fill: color, loc: `${x} ${y}` });
+    socket.emit('sendDiagram', transdiagram);
     diagram.model = model;
   };
 
