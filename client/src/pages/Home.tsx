@@ -1,22 +1,60 @@
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import { routes } from '../routes/index';
-import PageLayout from '../components/PageLayout';
-import socketIOClient from 'socket.io-client';
+import React, { useEffect, useState } from 'react'
+import Axios from 'axios';
+import { Col, Card, Row, Avatar } from 'antd';
+import ImageSlider from './ImageSlider';
 
-interface Props {
-  useAuthInput: [boolean, (userId: string | undefined) => void];
+const { Meta } = Card;
+
+function Home() {
+    const [Posts, setPosts] = useState([])
+    // const [userList, setuserList] = useState([]);
+
+    useEffect(() => {
+        Axios.get('http://192.249.18.120:80/post/getPosts')
+            .then(response => {
+                console.log("getPosts");
+                if (response.data.ok) {
+                    setPosts(response.data.posts)
+                    console.log('posts', response.data.posts)
+                } else {
+                    alert('Failed to fectch product datas')
+                }
+            })
+
+    }, [])
+
+    const renderCards = Posts.map((post, index) => {
+
+        return <Col key={index} lg={6} md={8} xs={24}>
+            <Card 
+                key={index}
+                hoverable={true}
+                cover={<ImageSlider images={post.images} />}
+            >
+                <Meta
+                    title={post.title}
+                />
+            </Card>
+        </Col>
+
+    })
+
+
+    return (
+        <div style={{ width: '75%', margin: '3rem auto' }}>
+            {Posts.length === 0 ?
+                <div style={{ display: 'flex', height: '300px', justifyContent: 'center', alignItems: 'center' }}>
+                    <h2>No post yet...</h2>
+                </div> :
+                <div>
+                    <Row gutter={[16, 16]}>
+                        {renderCards}
+                    </Row>
+                </div>
+            }
+        <br /><br />
+        </div>
+    )
 }
 
-export default function Home({ useAuthInput }: Props) {
-  return (
-    <PageLayout title="home" useAuthInput={useAuthInput}>
-      <HomeContainer>home page입니다.</HomeContainer>
-    </PageLayout>
-  );
-}
-
-const HomeContainer = styled.div`
-  height: 100vh;
-`;
+export default Home;

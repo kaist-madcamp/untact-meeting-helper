@@ -8,6 +8,7 @@ import useAuth from './hooks/useAuth';
 import { GlobalStyles } from './styles/styles';
 import { PortalProvider } from './providers/PortalProvider';
 import WaitingRoom from './pages/WaitingRoom';
+import './App.css'
 
 function App() {
   const [isLoggedIn, toggleAuth] = useAuth();

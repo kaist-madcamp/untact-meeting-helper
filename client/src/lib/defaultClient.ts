@@ -4,7 +4,7 @@ import { TOKEN } from './constant';
 const token = localStorage.getItem(TOKEN);
 
 const Axios: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:80' || 'http://192.249.18.120',
+  baseURL: 'http://192.249.18.120',
   headers: {
     authorization: token,
   },
