@@ -58,8 +58,8 @@ router.get("/getPosts", (req, res) => {
         .sort({updatedAt: -1})
         .populate("writer")
         .exec((err, posts) => {
-            if(err) return res.status(400).json({success: false})
-            return res.status(200).json({success: true, posts})
+            if(err) return res.status(400).json({ok: false})
+            return res.status(200).json({ok: true, posts})
         })
 
 });
