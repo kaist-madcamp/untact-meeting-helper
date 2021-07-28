@@ -6,10 +6,11 @@ import PostInfo from './detail/PostInfo';
 import { Row, Col, Button, Menu, Dropdown } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { DownOutlined, MoreOutlined } from '@ant-design/icons';
+import type { PostType } from './detail/types';
 
-function DetailPost(props) {
+function DetailPost(props: any) {
     const postId = props.match.params.postId
-    const [Posts, setPosts] = useState([])
+    const [Posts, setPosts] = useState<PostType>()
     const [VisibleBtn, setVisibleBtn] = useState(true)
 
     const postVariable = {
@@ -25,7 +26,7 @@ function DetailPost(props) {
     }, [])
 
 
-    const deletePost = (e) => {
+    const deletePost = (e: any) => {
         if (window.confirm("Really Delete?") == true) {
             Axios.delete('http://192.249.18.120:80/post/delete', { data: { postId: postId }, withCredentials: true })
                 .then(response => {
@@ -50,12 +51,13 @@ function DetailPost(props) {
         </Menu>
       );
 
+
     return (
         <div className="postPage" style={{ marginLeft: '270px', marginRight: '270px' }}>
-            {Posts.images?.length !== 0  && (
+            {Posts?.images?.length !== 0  && (
                 <Row gutter={[16, 16]} >
                     <Col lg={12} xs={24} >
-                        <PostImage detail={Posts} />
+                        <PostImage posts={Posts!}/>
                     </Col>
                     <Col lg={1} xs={2}/>
                     <Col lg={11} xs={24}>
@@ -66,7 +68,7 @@ function DetailPost(props) {
                                 </MoreOutlined>
                             </Dropdown>
                         }
-                        <PostInfo detail={Posts} writer={Posts.writer} />
+                        <PostInfo detail={Posts} />
                     </Col>
                 </Row>
             )}

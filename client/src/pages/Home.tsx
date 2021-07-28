@@ -21,10 +21,13 @@ export default function Home({ useAuthInput }: Props) {
     const [Posts, setPosts] = useState([])
     // const [userList, setuserList] = useState([]);
 
+    const userVariable = {
+        userId: localStorage.getItem("TOKEN")
+    };
+
     useEffect(() => {
-        Axios.get('http://192.249.18.120:80/post/getPosts')
+        Axios.post('http://192.249.18.120:80/post/posts_by_user', userVariable)
             .then(response => {
-                console.log("getPosts");
                 if (response.data.ok) {
                     setPosts(response.data.posts)
                     console.log('posts', response.data.posts)

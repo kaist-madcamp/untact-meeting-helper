@@ -81,7 +81,7 @@ router.post("/posts_by_user", (req, res) => {
     console.log('posts_by_user')
     // console.log("in the posts_by_user" + userId)
     //we need to find the product information that belong to product Id 
-    Post.find({"writer": req.body.writer})
+    Post.find({"writer": req.body.userId})
         .populate('writer')
         .exec((err, posts) => {
             if (err) return res.status(400).send(err)
