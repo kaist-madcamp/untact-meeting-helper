@@ -5,6 +5,15 @@ import { useState, useRef, useEffect } from 'react';
 import Peer from 'simple-peer';
 import { isReturnStatement } from 'typescript';
 
+interface CallType {
+  name?: string;
+  to?: string;
+  from?: string;
+  isReceivingCall?: boolean;
+  signal?: Peer.SignalData;
+  roomId?: string;
+}
+
 interface ContextType {
   call?: CallType;
   callAccepted?: boolean;
@@ -18,6 +27,8 @@ interface ContextType {
   callUser?: (id: string) => void;
   leaveCall?: () => void;
   answerCall?: () => void;
+  roomId?: string;
+  setRoomId?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const SocketContext = createContext<ContextType>({});
@@ -30,14 +41,6 @@ const SOCKET_URL = 'https://video-chat-app-legitimation.herokuapp.com/';
 
 const socket = io(SOCKET_URL);
 
-interface CallType {
-  name?: string;
-  to?: string;
-  from?: string;
-  isReceivingCall?: boolean;
-  signal?: Peer.SignalData;
-}
-
 const SocketContextProvider = ({ children }: Props) => {
   const [callAccepted, setCallAccepted] = useState(false);
   const [callEnded, setCallEnded] = useState(false);
@@ -45,6 +48,7 @@ const SocketContextProvider = ({ children }: Props) => {
   const [name, setName] = useState('');
   const [call, setCall] = useState<CallType>({});
   const [me, setMe] = useState('');
+  const [roomId, setRoomId] = useState('');
 
   const myVideo = useRef<HTMLVideoElement>(null);
   const userVideo = useRef<HTMLVideoElement>(null);
@@ -63,7 +67,12 @@ const SocketContextProvider = ({ children }: Props) => {
     socket.on('me', (id) => setMe(id));
 
     socket.on('callUser', ({ from, name: callerName, signal }) => {
-      setCall({ isReceivingCall: true, from, name: callerName, signal });
+      setCall({
+        isReceivingCall: true,
+        from,
+        name: callerName,
+        signal,
+      });
     });
   }, []);
 
@@ -86,12 +95,12 @@ const SocketContextProvider = ({ children }: Props) => {
     connectionRef.current = peer;
   };
 
-  const callUser = (id: string) => {
+  const callUser = (roomId: string) => {
     const peer = new Peer({ initiator: true, trickle: false, stream });
 
     peer.on('signal', (data) => {
       socket.emit('callUser', {
-        userToCall: id,
+        userToCall: roomId,
         signalData: data,
         from: me,
         name,
@@ -132,6 +141,8 @@ const SocketContextProvider = ({ children }: Props) => {
         callUser,
         leaveCall,
         answerCall,
+        roomId,
+        setRoomId,
       }}
     >
       {children}
