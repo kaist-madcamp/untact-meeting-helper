@@ -1,35 +1,31 @@
-import { useCallback, useEffect, useState, createRef, useContext } from 'react';
-import styled from 'styled-components';
-import Button from '../components/UI/Button';
-import Diagram from '../components/diagram/Diagram';
-import Header from '../components/UI/Header';
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from 'react-speech-recognition';
-import PageTitle from '../components/PageTitle';
-import VideoPlayer from '../components/webcam/VideoPlayer';
-import Options from '../components/webcam/Options';
-import Notifications from '../components/webcam/Notifications';
-import PageLayout from '../components/PageLayout';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import Draggable from 'react-draggable';
-import Modal from '../components/UI/Modal';
+import SpeechRecognition, {
+  useSpeechRecognition
+} from 'react-speech-recognition';
+import io from 'socket.io-client';
+import styled from 'styled-components';
 import {
-  ChatContainer,
-  ChatMainBox,
-  ChatBox,
-  ChatBlock,
+  ChatBlock, ChatBox, ChatContainer,
+  ChatMainBox
 } from '../components/chat/ChatContainer';
 import {
   ChatControlBox,
-  ChatController,
+  ChatController
 } from '../components/chat/ChatController';
-import io from 'socket.io-client';
-import { SERVER_ENDPOINT } from '../lib/constant';
 import {
   ChatForm,
   ChatFormButton,
-  ChatFormTextarea,
+  ChatFormTextarea
 } from '../components/chat/ChatForm';
+import Diagram from '../components/diagram/Diagram';
+import PageLayout from '../components/PageLayout';
+import Button from '../components/UI/Button';
+import Modal from '../components/UI/Modal';
+import Notifications from '../components/webcam/Notifications';
+import Options from '../components/webcam/Options';
+import VideoPlayer from '../components/webcam/VideoPlayer';
+import { SERVER_ENDPOINT } from '../lib/constant';
 import { SocketContext } from '../providers/SocketProvider';
 
 interface Props {

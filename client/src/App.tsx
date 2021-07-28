@@ -8,6 +8,8 @@ import useAuth from './hooks/useAuth';
 import { GlobalStyles } from './styles/styles';
 import { PortalProvider } from './providers/PortalProvider';
 import WaitingRoom from './pages/WaitingRoom';
+import Upload from './pages/Upload';
+import DetailPost from './pages/DetailPost';
 import './App.css'
 
 function App() {
@@ -31,6 +33,9 @@ function App() {
           <Route path={routes.meetingRoom}>
             <MeetingRoom useAuthInput={[isLoggedIn, toggleAuth]} />
           </Route>
+
+          <Route path={routes.upload} component={Upload}></Route>
+          <Route exact path="/post/:postId" component={DetailPost} />
         </Switch>
       </HelmetProvider>
     </PortalProvider>

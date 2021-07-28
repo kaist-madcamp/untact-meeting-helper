@@ -30,9 +30,9 @@ router.post("/uploadImage", (req, res) => {
     console.log("uploadImage")
     upload(req, res, err => {
         if (err) {
-            return res.json({ success: false, err })
+            return res.json({ ok: false, err })
         }
-        return res.json({ success: true, image: res.req.file.path, fileName: res.req.file.filename })
+        return res.json({ ok: true, image: res.req.file.path, fileName: res.req.file.filename })
     })
 
 });
@@ -45,8 +45,8 @@ router.post("/uploadPost", (req, res) => {
     //save all the data we got from the client into the DB 
     const post = new Post(req.body)
     post.save((err) => {
-        if (err) return res.status(400).json({ success: false, err })
-        return res.status(200).json({ success: true })
+        if (err) return res.status(400).json({ ok: false, err })
+        return res.status(200).json({ ok: true })
     })
 
 });
@@ -73,7 +73,7 @@ router.post("/post_by_id", (req, res) => {
         .populate('writer')
         .exec((err, post) => {
             if (err) return res.status(400).send(err)
-            return res.status(200).json({success: true, post})
+            return res.status(200).json({ok: true, post})
         })
 });
 
@@ -85,7 +85,7 @@ router.post("/posts_by_user", (req, res) => {
         .populate('writer')
         .exec((err, posts) => {
             if (err) return res.status(400).send(err)
-            return res.status(200).json({success: true, posts})
+            return res.status(200).json({ok: true, posts})
         })
 });
 
@@ -93,7 +93,7 @@ router.delete("/delete", (req, res) => {
     console.log('post_delete')
     Post.findOneAndDelete({"_id": req.body.postId}, (err, post) => {
         if (err) return res.status(400).send(err)
-        return res.status(200).json({success: true, post})
+        return res.status(200).json({ok: true, post})
     })
 })
 
@@ -116,7 +116,7 @@ router.put("/update", (req, res) => {
         },
         (err, post) => {
             if (err) return res.status(400).send(err)
-            return res.status(200).json({success: true, post})
+            return res.status(200).json({ok: true, post})
         }
         
     )

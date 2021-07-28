@@ -10,6 +10,9 @@ const postSchema = mongoose.Schema({
         type: String,
         maxlength: 50
     },
+    content: {
+        type: String
+    },
     images: {
         type: Array,
         default: []
