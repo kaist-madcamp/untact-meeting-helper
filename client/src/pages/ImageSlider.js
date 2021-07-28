@@ -1,7 +1,7 @@
 import React from 'react'
 import { Carousel } from 'antd';
 
-function ImageSlider(props) {
+const ImageSlider = (props) => {
     return (
         <div>
             <Carousel autoplay>

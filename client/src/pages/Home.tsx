@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import Axios from 'axios';
-import { Col, Card, Row, Avatar } from 'antd';
+import { Col, Card, Row, Avatar, Button } from 'antd';
 import ImageSlider from './ImageSlider';
+
 
 const { Meta } = Card;
 
-function Home() {
+interface PostType {
+    title: string;
+    images: string[];
+   
+  }
+  
+interface Props {
+  useAuthInput: [boolean, (userId: string | undefined) => void];
+}
+
+export default function Home({ useAuthInput }: Props) {
     const [Posts, setPosts] = useState([])
     // const [userList, setuserList] = useState([]);
 
@@ -23,7 +34,7 @@ function Home() {
 
     }, [])
 
-    const renderCards = Posts.map((post, index) => {
+    const renderCards = Posts.map((post: PostType, index) => {
 
         return <Col key={index} lg={6} md={8} xs={24}>
             <Card 
@@ -47,7 +58,7 @@ function Home() {
                     <h2>No post yet...</h2>
                 </div> :
                 <div>
-                    <Row gutter={[16, 16]}>
+                    <Row gutter={[16,16]} style={{display: 'center'}}>
                         {renderCards}
                     </Row>
                 </div>
@@ -56,5 +67,3 @@ function Home() {
         </div>
     )
 }
-
-export default Home;
