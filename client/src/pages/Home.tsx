@@ -10,13 +10,6 @@ interface Props {
 }
 
 export default function Home({ useAuthInput }: Props) {
-  useEffect(() => {
-    const socket = socketIOClient('localhost:80');
-    socket.on('connect', () => {
-      console.log('client connected!');
-    });
-  }, []);
-
   return (
     <PageLayout title="home" useAuthInput={useAuthInput}>
       <HomeContainer>home page입니다.</HomeContainer>
