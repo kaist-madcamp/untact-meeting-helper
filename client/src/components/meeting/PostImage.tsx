@@ -24,7 +24,6 @@ function PostImage({ log }: Props) {
     }
   }, [log]);
 
-  console.log(Images);
   return (
     <div>
       <ImageGallery items={Images} />

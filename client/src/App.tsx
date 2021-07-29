@@ -39,7 +39,7 @@ function App() {
           </Route>
 
           <Route path="/meeting-log/:logId" exact>
-            <DetailMeetingLog />
+            <DetailMeetingLog useAuthInput={[isLoggedIn, toggleAuth]} />
           </Route>
         </Switch>
       </HelmetProvider>

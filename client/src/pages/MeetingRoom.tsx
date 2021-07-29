@@ -36,15 +36,15 @@ interface Props {
   useAuthInput: [boolean, (userId: string | undefined) => void];
 }
 
-const socket = io(SOCKET_ENDPOINT);
-
 export default function MeetingRoom({ useAuthInput }: Props) {
+  const [socket, setSocket] = useState(io(SOCKET_ENDPOINT));
   const [transcriptArr, setTranscriptArr] = useState<string[]>([]);
   const [recording, setRecording] = useState(false);
   const [showChatBox, setShowChatBox] = useState(false);
   const [faceContainerWidth, setFaceContainerWidth] = useState('default');
   const [keystroke, setKeystroke] = useState('');
   const [attendingUser, setAttendingUser] = useState('');
+
   const [chatArray, setChatArray] = useState<
     {
       username: string;
@@ -62,9 +62,13 @@ export default function MeetingRoom({ useAuthInput }: Props) {
       alert("Browser doesn't support speech recognition.");
     }
 
-    socket.on('attending-user', ({ text }) => {
-      console.log('attending user : ', text);
+    socket.on('notification-user', ({ text }) => {
+      console.log('notify user : ', text);
       setAttendingUser(text);
+    });
+
+    socket.on('left-user', ({ username, message }) => {
+      setAttendingUser(message);
     });
 
     socket.on('receive-message', ({ username, message }) => {
@@ -79,6 +83,14 @@ export default function MeetingRoom({ useAuthInput }: Props) {
     if (!container) return;
     container.scrollTop = container.scrollHeight;
   }, [chatArray]);
+
+  useEffect(() => {
+    // 통화 끊었을 때 socket disconnect
+    if (callEnded) {
+      socket.disconnect();
+      console.log('client disconnected!');
+    }
+  }, [callEnded]);
 
   useEffect(() => {
     // 통화 받았을 때, 채팅 시작.
@@ -159,7 +171,7 @@ export default function MeetingRoom({ useAuthInput }: Props) {
     <PageLayout title="Room" useAuthInput={useAuthInput}>
       <Container>
         <DiagramContainer>
-          <Diagram transcriptArr={transcriptArr} />
+          <Diagram transcriptArr={transcriptArr} socket={socket} />
 
           <ControlBox>
             <Button type="mic" onClick={toggleListening}>
