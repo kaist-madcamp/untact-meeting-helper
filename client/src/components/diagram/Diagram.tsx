@@ -214,13 +214,24 @@ const CaptureBtn = styled.button`
 
 const TranscriptBox = styled.div`
   height: 150px;
-  background-color: #fff;
+  background-color: aliceblue;
   color: black;
   margin-top: 10px;
   padding: 10px;
-  border: 1px solid gray;
-  border-radius: 10px;
+  border: 2px solid black;
+  border-radius: 20px;
   overflow: scroll;
 `;
 
+const Containerbackground = styled.div`
+  margin: 3rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: -1;
+  transform: rotate(300deg);
+  -webkit-transform: rotate(300deg);
+  color: #c6afaf;
+`;
 export default Diagram;

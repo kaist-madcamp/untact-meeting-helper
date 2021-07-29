@@ -22,19 +22,16 @@ function PostImage({ log }: Props) {
       });
       setImages(images);
     }
-  }, []);
+  }, [log]);
 
+  console.log(Images);
   return (
-    <Container>
+    <div>
       <ImageGallery items={Images} />
-    </Container>
+    </div>
   );
 }
 
-const Container = styled.div`
-  width: 300px;
-  height: 300px;
-  overflow: hidden;
-`;
+const Container = styled.div``;
 
 export default PostImage;

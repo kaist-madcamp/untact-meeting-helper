@@ -22,32 +22,33 @@ const VideoPlayer = ({ widthController }: Props) => {
   return (
     <Container>
       {stream && (
-        //   내 캠
+        //   Our own video
         <VideoContainer>
           <VideoTitle>
-            {name || window.location.pathname === '/'
-              ? 'Waiting room'
-              : 'Invite friends!'}
-            <SButton className="plus" onClick={widthController[1]}>
-              <FontAwesomeIcon icon={faPlus} />
-            </SButton>
-            <SButton className="minus" onClick={widthController[2]}>
-              <FontAwesomeIcon icon={faMinus} />
-            </SButton>
+            <Title>
+              {name || window.location.pathname === '/'
+                ? 'Waiting Room'
+                : 'Invite Colleagues'}
+
+              <SButton className="plus" onClick={widthController[1]}>
+                <FontAwesomeIcon icon={faPlus} />
+              </SButton>
+              <SButton className="minus" onClick={widthController[2]}>
+                <FontAwesomeIcon icon={faMinus} />
+              </SButton>
+            </Title>
           </VideoTitle>
-          {widthController[0] !== 'down' && (
-            <SVideo
-              videoWidthRatio={widthController[0]}
-              playsInline
-              muted
-              ref={myVideo}
-              autoPlay
-            />
-          )}
+          <SVideo
+            videoWidthRatio={widthController[0]}
+            playsInline
+            muted
+            ref={myVideo}
+            autoPlay
+          />
         </VideoContainer>
       )}
       {callAccepted && !callEnded && (
-        // 친구 캠
+        // users video
         <VideoContainer>
           <VideoTitle>{call?.name || 'Name'}</VideoTitle>
           <SVideo
@@ -76,6 +77,14 @@ const VideoTitle = styled.div`
   font-size: 24px;
   font-weight: 500;
   white-space: pre;
+`;
+
+const Title = styled.h1`
+  color: black;
+  font-size: 24px;
+  /* padding: 0em 0em; */
+  font-weight: bold;
+  font-family: Times;
 `;
 
 const VideoContainer = styled.div`
