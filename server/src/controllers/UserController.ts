@@ -7,7 +7,7 @@ class UserController {
   static async join(req: Request, res: Response) {
     const { email, username, password } = req.body;
     if (!email || !username || !password)
-      return res.status(400).json({ ok: false, error: 'Invalid parameters' });
+      res.status(400).json({ ok: false, error: 'Invalid parameters' });
 
     const exists = await client.user.findUnique({
       where: {
@@ -19,7 +19,7 @@ class UserController {
     });
 
     if (exists) {
-      res.json({
+      return res.json({
         ok: false,
         error: 'User already exists.',
       });
@@ -49,40 +49,45 @@ class UserController {
   static async login(req: Request, res: Response) {
     const { email, password } = req.body;
     if (!(email && password)) {
-      res.json({
+      return res.status(400).json({
         ok: false,
         error: 'email or password is null',
       });
-      return;
     }
 
-    //Get user from database
-    const userExist = await client.user.findUnique({
-      where: {
-        email,
-      },
-    });
+    try {
+      const userExist = await client.user.findUnique({
+        where: {
+          email,
+        },
+      });
 
-    if (!userExist) {
+      if (!userExist) {
+        return res.json({
+          ok: false,
+          error: '존재하지 않는 계정입니다.',
+        });
+      }
+
+      console.log(password, userExist.password);
+      const passwordOk = await bcrypt.compare(password, userExist.password);
+      console.log(passwordOk);
+      if (!passwordOk) {
+        return res.json({
+          ok: false,
+          error: '비밀번호 불일치',
+        });
+      }
+
+      const token = jwt.sign({ id: userExist.id }, process.env.PRIVATE_KEY);
+
       return res.json({
-        ok: false,
-        error: "user doesn't exit",
+        ok: true,
+        token: token,
       });
+    } catch (error) {
+      console.log(error);
     }
-
-    if (!bcrypt.compareSync(password, userExist.password)) {
-      res.json({
-        ok: false,
-        error: 'incorrect password',
-      });
-    }
-
-    const token = jwt.sign({ id: userExist.id }, process.env.PRIVATE_KEY);
-
-    res.json({
-      ok: true,
-      token: token,
-    });
   }
 }
 
