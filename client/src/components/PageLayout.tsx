@@ -1,6 +1,5 @@
 import PageTitle from './PageTitle';
 import Header from './UI/Header';
-import styled from 'styled-components';
 
 interface Props {
   children: React.ReactNode;

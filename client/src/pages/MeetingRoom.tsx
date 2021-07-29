@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, createRef } from 'react';
+import { useCallback, useEffect, useState, createRef, useContext } from 'react';
 import styled from 'styled-components';
 import Button from '../components/UI/Button';
 import Diagram from '../components/diagram/Diagram';
@@ -24,44 +24,81 @@ import {
   ChatController,
 } from '../components/chat/ChatController';
 import io from 'socket.io-client';
-import { SERVER_ENDPOINT } from '../lib/constant';
+import { SOCKET_ENDPOINT } from '../lib/constant';
 import {
   ChatForm,
   ChatFormButton,
   ChatFormTextarea,
 } from '../components/chat/ChatForm';
+import { SocketContext } from '../providers/SocketProvider';
 
 interface Props {
   useAuthInput: [boolean, (userId: string | undefined) => void];
 }
 
-let socket;
+const socket = io(SOCKET_ENDPOINT);
 
 export default function MeetingRoom({ useAuthInput }: Props) {
   const [transcriptArr, setTranscriptArr] = useState<string[]>([]);
   const [recording, setRecording] = useState(false);
   const [showChatBox, setShowChatBox] = useState(false);
   const [faceContainerWidth, setFaceContainerWidth] = useState('default');
-
-  const [username, setUsername] = useState();
-  const [roomId, setRoomId] = useState();
-
   const [keystroke, setKeystroke] = useState('');
-
+  const [attendingUser, setAttendingUser] = useState('');
+  const [chatArray, setChatArray] = useState<
+    {
+      username: string;
+      message: string;
+    }[]
+  >([]);
   const { transcript, resetTranscript } = useSpeechRecognition();
+
+  const { roomId, name: myUsername, callAccepted, callEnded } = useContext(
+    SocketContext,
+  );
 
   useEffect(() => {
     if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
       alert("Browser doesn't support speech recognition.");
     }
 
-    socket = io(SERVER_ENDPOINT);
+    socket.on('attending-user', ({ text }) => {
+      console.log('attending user : ', text);
+      setAttendingUser(text);
+    });
+
+    socket.on('receive-message', ({ username, message }) => {
+      console.log('username : ', username);
+      console.log('message : ', message);
+      setChatArray((prev) => [...prev, { username, message }]);
+    });
   }, []);
+
+  useEffect(() => {
+    const container = document.getElementById('chat-main-box');
+    if (!container) return;
+    container.scrollTop = container.scrollHeight;
+  }, [chatArray]);
+
+  useEffect(() => {
+    // 통화 받았을 때, 채팅 시작.
+    if (callAccepted && !callEnded) {
+      console.log('my name : ', myUsername);
+      console.log('room Id : ', roomId);
+      if (!myUsername || !roomId) return;
+      socket.emit(
+        'join-meeting',
+        { name: myUsername, roomId },
+        (error: string) => {
+          alert(error);
+        },
+      );
+    }
+  }, [callAccepted, callEnded]);
 
   useEffect(() => {
     const newTranscriptArr = transcript.split(' ');
     setTranscriptArr(newTranscriptArr);
-    console.log('newTranscriptArr', newTranscriptArr);
   }, [transcript]);
 
   const toggleListening = useCallback(() => {
@@ -99,9 +136,14 @@ export default function MeetingRoom({ useAuthInput }: Props) {
 
   const sendMessageHandler = (e?: React.FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
+    if (keystroke.length === 0) return;
     console.log('submit!');
     // socket emit
-
+    socket.emit('send-message', keystroke);
+    setChatArray((prev) => [
+      ...prev,
+      { username: myUsername!, message: keystroke },
+    ]);
     setKeystroke('');
   };
 
@@ -158,18 +200,24 @@ export default function MeetingRoom({ useAuthInput }: Props) {
                     x
                   </ChatController>
                 </ChatControlBox>
-                <ChatMainBox>
-                  <ChatBlock location="left">
-                    <ChatBox className="receive_box">안녕</ChatBox>
-                  </ChatBlock>
-
-                  <ChatBlock location="left">
-                    <ChatBox className="receive_box">안녕</ChatBox>
-                  </ChatBlock>
-
-                  <ChatBlock location="right">
-                    <ChatBox className="send_box">반가워~</ChatBox>
-                  </ChatBlock>
+                <ChatMainBox id="chat-main-box">
+                  <AttendingNotification>{attendingUser}</AttendingNotification>
+                  {chatArray.map((chat, idx) => (
+                    <ChatBlock
+                      key={idx}
+                      location={chat.username === myUsername ? 'right' : 'left'}
+                    >
+                      <ChatBox
+                        className={
+                          chat.username === myUsername
+                            ? 'send_box'
+                            : 'receive_box'
+                        }
+                      >
+                        {chat.message}
+                      </ChatBox>
+                    </ChatBlock>
+                  ))}
                 </ChatMainBox>
                 <ChatForm
                   method="post"
@@ -204,6 +252,11 @@ const DiagramContainer = styled.div`
 `;
 
 const ControlBox = styled.div``;
+
+const AttendingNotification = styled.p`
+  text-align: center;
+  font-size: 10px;
+`;
 
 export const FaceContainer = styled.div<{ faceContainerWidth: string }>`
   position: absolute;

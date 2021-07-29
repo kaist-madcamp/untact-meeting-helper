@@ -2,7 +2,11 @@ import styled from 'styled-components';
 import { routes } from '../../routes/index';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHandshake, faHouseUser } from '@fortawesome/free-solid-svg-icons';
+import {
+  faHandshake,
+  faUpload,
+  faHouseUser,
+} from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import Backdrop from './Backdrop';
 import Login from '../../pages/Login';
@@ -42,10 +46,13 @@ export default function Header({ useAuthInput }: Props) {
             <Link to={routes.meetingRoom}>
               <FontAwesomeIcon icon={faHandshake} />
             </Link>
+            <Link to={routes.upload}>
+              <FontAwesomeIcon icon={faUpload} />
+            </Link>
             <SButton onClick={() => useAuthInput[1]()}>Log out</SButton>
           </div>
         ) : (
-          <div>
+          <>
             <a>
               <FontAwesomeIcon
                 onClick={() => setShowLoginModal(true)}
@@ -58,7 +65,13 @@ export default function Header({ useAuthInput }: Props) {
                 icon={faHandshake}
               />
             </a>
-          </div>
+            <a>
+              <FontAwesomeIcon
+                onClick={() => setShowLoginModal(true)}
+                icon={faUpload}
+              />
+            </a>
+          </>
         )}
 
         <Backdrop

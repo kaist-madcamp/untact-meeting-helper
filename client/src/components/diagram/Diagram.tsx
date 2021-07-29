@@ -1,18 +1,28 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useContext, useRef } from 'react';
 import * as go from 'gojs';
 import styled from 'styled-components';
 import { ReactDiagram } from 'gojs-react';
 import { random_rgba } from './utils';
 import './Diagram.css';
 import html2canvas from 'html2canvas';
+import io from 'socket.io-client';
+import { SOCKET_ENDPOINT } from '../../lib/constant';
+import { SocketContext } from '../../providers/SocketProvider';
 
 interface Props {
   transcriptArr: string[];
 }
 
+interface DiagramProperty {
+  word: string;
+  posX: number;
+  posY: number;
+  color: string;
+}
+
 let model: go.GraphLinksModel;
 let diagram: go.Diagram;
-
+let socket: any;
 function initDiagram() {
   const $ = go.GraphObject.make;
   model = new go.GraphLinksModel();
@@ -89,12 +99,44 @@ function initDiagram() {
   return diagram;
 }
 
-let name = 1;
+let imgNum = 1;
 
 const Diagram = React.forwardRef(({ transcriptArr }: Props) => {
   const canvasRef = useRef<HTMLDivElement>(null);
 
-  function saveAs(uri: string, filename: string) {
+  const { roomId, name: myUsername, callAccepted, callEnded } = useContext(
+    SocketContext,
+  );
+
+  useEffect(() => {
+    socket = io(SOCKET_ENDPOINT);
+
+    socket.on('receive-diagram', (receivedDiagram: DiagramProperty) => {
+      model.addNodeData({
+        key: receivedDiagram.word,
+        fill: receivedDiagram.color,
+        loc: `${receivedDiagram.posX} ${receivedDiagram.posY}`,
+      });
+      diagram.model = model;
+    });
+  }, []);
+
+  useEffect(() => {
+    if (callAccepted && !callEnded) {
+      console.log('my name : ', myUsername);
+      console.log('room Id : ', roomId);
+      if (!myUsername || !roomId) return;
+      socket.emit(
+        'join-meeting',
+        { name: myUsername, roomId },
+        (error: string) => {
+          alert(error);
+        },
+      );
+    }
+  }, [callAccepted, callEnded]);
+
+  const saveAs = (uri: string, filename: string) => {
     const link = document.createElement('a');
     console.log('link : ', link);
     if (typeof link.download === 'string') {
@@ -106,23 +148,30 @@ const Diagram = React.forwardRef(({ transcriptArr }: Props) => {
     } else {
       window.open(uri);
     }
-  }
+  };
 
   const wordClickHandler = (word: string) => {
-    console.log('word clicked');
-    const x = Math.random() * 900,
-      y = Math.random() * 300;
+    const posX = Math.random() * 900;
+    const posY = Math.random() * 300;
     const color = random_rgba();
-    model.addNodeData({ key: word, fill: color, loc: `${x} ${y}` });
+
+    const diagramData: DiagramProperty = {
+      word,
+      posX,
+      posY,
+      color,
+    };
+    model.addNodeData({ key: word, fill: color, loc: `${posX} ${posY}` });
     diagram.model = model;
+    socket.emit('send-diagram', diagramData);
   };
 
   const captureBtnHandler = () => {
     if (!canvasRef.current) return;
     html2canvas(canvasRef.current, {}).then((canvas) => {
-      saveAs(canvas.toDataURL(), `picture-${name}.png`);
+      saveAs(canvas.toDataURL(), `picture-${imgNum}.png`);
     });
-    name++;
+    imgNum++;
   };
 
   return (

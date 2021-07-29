@@ -3,11 +3,12 @@ import styled from 'styled-components';
 import { Button, TextField, Grid, Paper } from '@material-ui/core';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Assignment, Phone, PhoneDisabled } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
 import { SocketContext } from '../../providers/SocketProvider';
 
 interface Props {
   children: React.ReactNode;
+  // usernameInput: [string, React.Dispatch<React.SetStateAction<string>>];
+  // usernameInput: [string, React.Dispatch<React.SetStateAction<string>>]
 }
 
 const Options = ({ children }: Props) => {
@@ -19,8 +20,10 @@ const Options = ({ children }: Props) => {
     callEnded,
     leaveCall,
     callUser,
+    roomId,
+    setRoomId,
   } = useContext(SocketContext);
-  const [idToCall, setIdToCall] = useState('');
+  // const [roomId, setRoomId] = useState('');
 
   return (
     <Container>
@@ -46,8 +49,8 @@ const Options = ({ children }: Props) => {
       <Row>
         <TextField
           label="Room ID to call"
-          value={idToCall}
-          onChange={(e) => setIdToCall(e.target.value)}
+          value={roomId}
+          onChange={(e) => setRoomId!(e.target.value)}
           fullWidth
         />
 
@@ -67,7 +70,7 @@ const Options = ({ children }: Props) => {
             color="primary"
             startIcon={<Phone fontSize="small" />}
             fullWidth
-            onClick={() => callUser!(idToCall)}
+            onClick={() => callUser!(roomId!)}
           >
             Call
           </Button>
