@@ -4,6 +4,7 @@ import Options from '../components/webcam/Options';
 import VideoPlayer from '../components/webcam/VideoPlayer';
 import Draggable from 'react-draggable';
 import PageLayout from '../components/PageLayout';
+import flowers from './flower_bg.jpeg';
 import { useState } from 'react';
 
 interface Props {
@@ -30,7 +31,7 @@ export default function WaitingRoom({ useAuthInput }: Props) {
   };
 
   return (
-    <PageLayout title={'waiting room'} useAuthInput={useAuthInput}>
+    <PageLayout title={'Waiting room'} useAuthInput={useAuthInput}>
       <Draggable>
         <Container>
           <FaceContainer faceContainerWidth={faceContainerWidth}>
@@ -56,6 +57,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-image: perfume;
 `;
 
 const FaceContainer = styled.div<{ faceContainerWidth: string }>`

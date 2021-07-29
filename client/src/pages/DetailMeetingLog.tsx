@@ -12,16 +12,18 @@ function DetailMeetingLog(props: any) {
   const [meetingLog, setMeetingLog] = useState<MeetingLogType>();
   // const [VisibleBtn, setVisibleBtn] = useState(true);
 
+  const fetchDetailLog = async () => {
+    const res = await Axios.get(`/post/${logId}`);
+    console.log(res);
+    if (res.data.ok) {
+      setMeetingLog(res.data.post);
+    } else {
+      alert(res.data.error);
+    }
+  };
+
   useEffect(() => {
-    console.log(logId);
-    Axios.get(`/post/${logId}`).then(({ data }) => {
-      if (data.ok) {
-        console.log(data.post);
-        setMeetingLog(data.post);
-      } else {
-        alert(data.error);
-      }
-    });
+    fetchDetailLog();
   }, []);
 
   const deletePost = (e: any) => {
@@ -48,6 +50,7 @@ function DetailMeetingLog(props: any) {
     </Menu>
   );
 
+  console.log(meetingLog);
 
   return (
     <div

@@ -94,18 +94,22 @@ export default function Header({ useAuthInput }: Props) {
 
 const SHeader = styled.header`
   display: flex;
-  padding: 15px 0;
-  border-bottom: 1px solid black;
+  padding: 10px 0;
+  border-bottom: 2px solid black;
+  border-top: 2px solid black;
+  border-left: 3px solid black;
+  border-right: 3px solid black;
+  background-color: aliceblue;
 `;
 
 const Navigation = styled.nav`
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
   svg {
     margin: 0 20px;
-    color: black;
+    color: blurry;
   }
   a {
     cursor: pointer;
@@ -118,13 +122,18 @@ const Title = styled.h1`
     text-decoration: underline;
   }
   cursor: pointer;
+  font-size: 32px;
+  text-align: justify;
+  padding: 0.25em 1em;
+  font-weight: bold;
+  font-family: Times, cursive;
 `;
 
 const SButton = styled.button`
   background-color: #3f51b5;
   color: #fff;
-  padding: 5px;
-  border: 0;
+  padding: 10px;
+  border: 10;
   height: 100%;
   cursor: pointer;
 `;
