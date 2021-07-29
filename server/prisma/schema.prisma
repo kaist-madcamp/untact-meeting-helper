@@ -22,7 +22,7 @@ model MeetingLog {
   id        Int      @id @default(autoincrement())
   title     String
   contents  String
-  image     String?
+  images    String[]
   user      User?    @relation(fields: [userId], references: [id])
   userId    Int?
   createdAt DateTime @default(now())
