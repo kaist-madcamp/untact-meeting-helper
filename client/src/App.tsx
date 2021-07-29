@@ -8,6 +8,9 @@ import useAuth from './hooks/useAuth';
 import { GlobalStyles } from './styles/styles';
 import { PortalProvider } from './providers/PortalProvider';
 import WaitingRoom from './pages/WaitingRoom';
+import Upload from './pages/Upload';
+import './App.css';
+import DetailMeetingLog from './pages/DetailMeetingLog';
 
 function App() {
   const [isLoggedIn, toggleAuth] = useAuth();
@@ -29,6 +32,14 @@ function App() {
 
           <Route path={routes.meetingRoom}>
             <MeetingRoom useAuthInput={[isLoggedIn, toggleAuth]} />
+          </Route>
+
+          <Route path={routes.upload}>
+            <Upload useAuthInput={[isLoggedIn, toggleAuth]} />
+          </Route>
+
+          <Route path="/meeting-log/:logId" exact>
+            <DetailMeetingLog />
           </Route>
         </Switch>
       </HelmetProvider>

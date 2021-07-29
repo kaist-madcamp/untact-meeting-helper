@@ -62,7 +62,7 @@ export default function SignUp({ toggleAuthTypeHandler }: Props) {
       <FormBox>
         <Title>Meeting Helper</Title>
         <h2>언텍트 시대, 화상 회의 도우미</h2>
-        {signUpSuccess && <Notification>로그인 성공!</Notification>}
+        {signUpSuccess && <Notification>회원가입 성공!</Notification>}
         <form onSubmit={handleSubmit(onSubmitValid)}>
           <Input
             {...register('email', {

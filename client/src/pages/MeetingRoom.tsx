@@ -24,7 +24,7 @@ import {
   ChatController,
 } from '../components/chat/ChatController';
 import io from 'socket.io-client';
-import { SERVER_ENDPOINT } from '../lib/constant';
+import { SOCKET_ENDPOINT } from '../lib/constant';
 import {
   ChatForm,
   ChatFormButton,
@@ -36,7 +36,7 @@ interface Props {
   useAuthInput: [boolean, (userId: string | undefined) => void];
 }
 
-const socket = io(SERVER_ENDPOINT);
+const socket = io(SOCKET_ENDPOINT);
 
 export default function MeetingRoom({ useAuthInput }: Props) {
   const [transcriptArr, setTranscriptArr] = useState<string[]>([]);

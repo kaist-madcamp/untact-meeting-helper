@@ -6,7 +6,7 @@ import { random_rgba } from './utils';
 import './Diagram.css';
 import html2canvas from 'html2canvas';
 import io from 'socket.io-client';
-import { SERVER_ENDPOINT } from '../../lib/constant';
+import { SOCKET_ENDPOINT } from '../../lib/constant';
 import { SocketContext } from '../../providers/SocketProvider';
 
 interface Props {
@@ -109,7 +109,7 @@ const Diagram = React.forwardRef(({ transcriptArr }: Props) => {
   );
 
   useEffect(() => {
-    socket = io(SERVER_ENDPOINT);
+    socket = io(SOCKET_ENDPOINT);
 
     socket.on('receive-diagram', (receivedDiagram: DiagramProperty) => {
       model.addNodeData({
