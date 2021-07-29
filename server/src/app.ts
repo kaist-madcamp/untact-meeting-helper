@@ -44,7 +44,7 @@ chatIo.on('connect', (socket: socketIO.Socket) => {
 
     socket.join(user.roomId);
 
-    socket.to(user.roomId).emit('attending-user', {
+    socket.to(user.roomId).emit('notification-user', {
       text: `${user.name}님이 참석했습니다.`,
     });
   });
@@ -59,16 +59,12 @@ chatIo.on('connect', (socket: socketIO.Socket) => {
   });
 
   socket.on('disconnect', () => {
+    console.log('server disconnect');
     const user = removeUser(socket.id);
 
     if (user) {
-      socket.to(user.roomId).emit('message', {
-        user: user.name,
-        text: `${user.name} has left.`,
-      });
-      socket.to(user.roomId).emit('roomData', {
-        users: getUsersInRoom(user.roomId),
-        roomId: user.roomId,
+      socket.to(user.roomId).emit('notification-user', {
+        text: `${user.name}이 방을 나갔습니다.`,
       });
     }
   });

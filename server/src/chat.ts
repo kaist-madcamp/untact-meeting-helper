@@ -1,4 +1,4 @@
-import client from './client'
+import client from './client';
 
 interface User {
   id: string;
@@ -13,10 +13,10 @@ export const addUser = ({ id, name, roomId }) => {
   name = name.trim().toLowerCase();
   roomId = roomId.trim().toLowerCase();
 
-  const existingUser = users.find(
-    (user) => user.roomId === roomId && user.name === name,
-  );
-  if (existingUser) return { error: '이미 접속한 유저입니다.' };
+  // const existingUser = users.find(
+  //   (user) => user.roomId === roomId && user.name === name,
+  // );
+  // if (existingUser) return { error: '이미 접속한 유저입니다.' };
 
   const user = { id, name, roomId };
   users.push(user);
