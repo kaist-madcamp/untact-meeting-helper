@@ -1,0 +1,13 @@
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+import styled from 'styled-components';
+export var ChatContainer = styled.div(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n  position: relative;\n  background-color: #222;\n  color: #fff;\n  height: 100%;\n  z-index: 999;\n  border-radius: 10px;\n  overflow: hidden;\n"], ["\n  position: relative;\n  background-color: #222;\n  color: #fff;\n  height: 100%;\n  z-index: 999;\n  border-radius: 10px;\n  overflow: hidden;\n"])));
+export var ChatMainBox = styled.div(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n  width: 100%;\n  height: 100%;\n  overflow-x: hidden;\n  overflow-y: scroll;\n  overscroll-behavior-y: contain;\n  scroll-snap-type: y proximity;\n  padding: 15px;\n  padding-bottom: 100px;\n  scroll-snap-align: end;\n  ::-webkit-scrollbar {\n    width: 5px;\n  }\n  ::-webkit-scrollbar-thumb {\n    background-color: #aaa;\n    border-radius: 10px;\n  }\n  ::-webkit-scrollbar-track {\n    margin-bottom: 100px;\n  }\n"], ["\n  width: 100%;\n  height: 100%;\n  overflow-x: hidden;\n  overflow-y: scroll;\n  overscroll-behavior-y: contain;\n  scroll-snap-type: y proximity;\n  padding: 15px;\n  padding-bottom: 100px;\n  scroll-snap-align: end;\n  ::-webkit-scrollbar {\n    width: 5px;\n  }\n  ::-webkit-scrollbar-thumb {\n    background-color: #aaa;\n    border-radius: 10px;\n  }\n  ::-webkit-scrollbar-track {\n    margin-bottom: 100px;\n  }\n"])));
+export var ChatBlock = styled.div(templateObject_3 || (templateObject_3 = __makeTemplateObject(["\n  display: flex;\n  justify-content: ", ";\n  & + & {\n    margin: 6px 0;\n  }\n"], ["\n  display: flex;\n  justify-content: ",
+    ";\n  & + & {\n    margin: 6px 0;\n  }\n"])), function (props) {
+    return props.location === 'left' ? 'flex-start' : 'flex-end';
+});
+export var ChatBox = styled.div(templateObject_4 || (templateObject_4 = __makeTemplateObject(["\n  display: inline-block;\n  border-radius: 30px;\n  padding: 10px;\n  font-size: 11px;\n  color: #fff;\n  box-shadow: 0 3rem 10rem hsl(0, 0%, 60%);\n  &.receive_box {\n    background-color: #343434;\n  }\n  &.send_box {\n    background-color: tomato;\n  }\n"], ["\n  display: inline-block;\n  border-radius: 30px;\n  padding: 10px;\n  font-size: 11px;\n  color: #fff;\n  box-shadow: 0 3rem 10rem hsl(0, 0%, 60%);\n  &.receive_box {\n    background-color: #343434;\n  }\n  &.send_box {\n    background-color: tomato;\n  }\n"])));
+var templateObject_1, templateObject_2, templateObject_3, templateObject_4;
