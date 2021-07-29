@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Button, Menu, Dropdown } from 'antd';
-import { withRouter } from 'react-router-dom';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { DownOutlined, MoreOutlined } from '@ant-design/icons';
 import PostImage from '../components/meeting/PostImage';
 import LogInfo from '../components/meeting/LogInfo';
 import { MeetingLogType } from '../components/meeting/types';
 import Axios from '../lib/defaultClient';
+import styled from 'styled-components';
+import PageLayout from '../components/PageLayout';
 
-function DetailMeetingLog(props: any) {
-  const { logId } = props.match.params;
+interface Props extends RouteComponentProps<any> {
+  useAuthInput: [boolean, (userId: string | undefined) => void];
+}
+
+function DetailMeetingLog({ useAuthInput, match, history }: Props) {
+  const { logId } = match.params;
   const [meetingLog, setMeetingLog] = useState<MeetingLogType>();
   // const [VisibleBtn, setVisibleBtn] = useState(true);
 
@@ -34,7 +40,7 @@ function DetailMeetingLog(props: any) {
       }).then((response) => {
         if (response.data.ok) {
           alert('Succesfully Delete');
-          props.history.push('/home');
+          history.push('/home');
         } else {
           alert('Failed to save Comment');
         }
@@ -53,26 +59,18 @@ function DetailMeetingLog(props: any) {
   console.log(meetingLog);
 
   return (
-    <div
-      className="postPage"
-      style={{ marginLeft: '270px', marginRight: '270px' }}
-    >
-      <Row gutter={[16, 16]}>
-        <Col lg={12} xs={24}>
-          <PostImage log={meetingLog!} />
-        </Col>
-        <Col lg={1} xs={2} />
-        <Col lg={11} xs={24}>
-          <Dropdown overlay={menu}>
-            <MoreOutlined style={{ float: 'right' }}>
-              <DownOutlined />
-            </MoreOutlined>
-          </Dropdown>
-          <LogInfo log={meetingLog!} />
-        </Col>
-      </Row>
-    </div>
+    <PageLayout title="detail-log" useAuthInput={useAuthInput}>
+      <Container>
+        <PostImage log={meetingLog!} />
+        <LogInfo log={meetingLog!} />
+      </Container>
+    </PageLayout>
   );
 }
+
+const Container = styled.div`
+  display: flex;
+  padding: 20px 150px 200px;
+`;
 
 export default withRouter(DetailMeetingLog);

@@ -5,12 +5,13 @@ import { ReactDiagram } from 'gojs-react';
 import { random_rgba } from './utils';
 import './Diagram.css';
 import html2canvas from 'html2canvas';
-import io from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
 import { SOCKET_ENDPOINT } from '../../lib/constant';
 import { SocketContext } from '../../providers/SocketProvider';
 
 interface Props {
   transcriptArr: string[];
+  socket: Socket;
 }
 
 interface DiagramProperty {
@@ -101,7 +102,7 @@ function initDiagram() {
 
 let imgNum = 1;
 
-const Diagram = React.forwardRef(({ transcriptArr }: Props) => {
+const Diagram = React.forwardRef(({ transcriptArr, socket }: Props) => {
   const canvasRef = useRef<HTMLDivElement>(null);
 
   const { roomId, name: myUsername, callAccepted, callEnded } = useContext(
@@ -109,8 +110,6 @@ const Diagram = React.forwardRef(({ transcriptArr }: Props) => {
   );
 
   useEffect(() => {
-    socket = io(SOCKET_ENDPOINT);
-
     socket.on('receive-diagram', (receivedDiagram: DiagramProperty) => {
       model.addNodeData({
         key: receivedDiagram.word,
