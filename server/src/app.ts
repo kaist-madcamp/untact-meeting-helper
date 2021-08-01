@@ -39,6 +39,7 @@ chatIo.on('connect', (socket: socketIO.Socket) => {
   socket.on('join-meeting', ({ name, roomId }, callback) => {
     if (!name || !roomId) return;
 
+
     const { user, error } = addUser({ id: socket.id, name, roomId });
     if (error) return callback(error);
 
@@ -74,7 +75,6 @@ chatIo.on('connect', (socket: socketIO.Socket) => {
     const user = getUser(socket.id);
     console.log(user);
     if (!user) return;
-    socket.emit('receive-diagram', diagram);
     socket.broadcast.to(user.roomId).emit('receive-diagram', diagram);
   });
 });
